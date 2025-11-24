@@ -1,16 +1,193 @@
 ---
+import {getCollection} from 'astro:content';
 
+// Get all content
+const intro = await getCollection('sections').then(entries =>
+    entries.find(entry => entry.id === 'intro.md')
+);
+const timeline = await getCollection('sections').then(entries =>
+    entries.find(entry => entry.id === 'timeline.md')
+);
+const contact = await getCollection('sections').then(entries =>
+    entries.find(entry => entry.id === 'contact.md')
+);
+
+// Get and sort projects by year (descending) and then by order
+// Filter to only show active projects
+const projects = (await getCollection('projects'))
+    .filter(project => project.data.active)
+    .sort((a, b) => {
+        if (b.data.year !== a.data.year) {
+            return b.data.year - a.data.year;
+        }
+        return a.data.order - b.data.order;
+    });
+
+// Render markdown content
+const {Content: IntroContent} = intro ? await intro.render() : {Content: null};
+const {Content: TimelineContent} = timeline ? await timeline.render() : {Content: null};
+const {Content: ContactContent} = contact ? await contact.render() : {Content: null};
+
+// Generate random favicon number
+const rand = Math.floor(Math.random() * 6);
 ---
 
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="description"
+              content="Bremen-based graphic designer and programmer, with a focus on experimental web development."/>
+        <meta name="author" content="David Wahrenburg"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="shortcut icon" href={`/images/favicon_${rand}.png`} type="image/x-icon"/>
+        <title>-.. .- ...- .. -.. / .-- | David Wahrenburg</title>
+
+        <script define:vars={{projects}}>
+            let activeArray = projects.map(p => ({
+                title: p.data.title,
+                url: p.data.url,
+                hasImages: p.data.hasImages,
+                showImages: p.data.showImages,
+                tags: p.data.tags,
+                year: p.data.year,
+                slug: p.slug
+            }));
+
+            // let curtainImgArray = []; // Will be populated when images are added
+            // let tagArray = []; // Will be populated when needed
+
+            // Preloader placeholder - implement when images are added
+            let thumbs = [];
+
+            function shuffleArray(array) {
+                for (var i = array.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+
+            // Matomo Analytics
+            var _paq = window._paq = window._paq || [];
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function () {
+                var u = "//webstat.davidwahrenburg.de/";
+                _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                _paq.push(['setSiteId', '1']);
+                var d = document,
+                    g = d.createElement('script'),
+                    s = d.getElementsByTagName('script')[0];
+                g.async = true;
+                g.src = u + 'matomo.js';
+                s.parentNode.insertBefore(g, s);
+            })();
+        </script>
+    </head>
+
+    <body>
+        <div id="text-container">
+            <p class="level-0">David Wahrenburg</p>
+            <div class="level-1 intro-content">
+                {IntroContent &&
+                        <IntroContent/>}
+            </div>
+            <br/>
+
+            <div class="projects-container">
+                <p class="level-0">Selected Projects:</p>
+                {projects.map((project) => {
+                    const hasImages = project.data.hasImages && project.data.showImages;
+                    const hasLink = project.data.url && project.data.url !== "";
+
+                    return (
+                            <>
+                            <p
+                                    class:list={[
+                                        "level-1",
+                                        {"has-images": hasImages},
+                                        {"has-link": hasLink}
+                                    ]}
+                                    id={project.slug}
+                            >
+                                {project.data.title}
+                                {hasImages && <span>■</span>}
+                                {hasLink && (
+                                        <a href={`https://${project.data.url}`} target="_blank">
+                                            ↗
+                                        </a>
+                                )}
+                            </p>
+                            <p class="level-2">
+                                (<i>{project.data.tags.length > 0 && `${project.data.tags.join(', ')}, `}</i>{project.data.year})
+                            </p>
+                            </>
+                    );
+                })}
+            </div>
+
+            <br/>
+            <p class="level-1">■&nbsp;images <span class="mobile-only">available in desktop view</span></p>
+            <p class="level-1">↗&nbsp;hyperlink</p>
+            <br/>
+
+            <div class="timeline-container">
+                <p class="level-0">Timeline:</p>
+                <div class="level-1 timeline-content">
+                    {TimelineContent &&
+                            <TimelineContent/>}
+                </div>
+            </div>
+
+            <br/>
+            <div class="contact-container">
+                <p class="level-0 contact">Contact me:</p>
+                <div class="level-1 contact-content">
+                    {ContactContent &&
+                            <ContactContent/>}
+                </div>
+            </div>
+
+            <br/>
+            <div id="impressum-btn" class="level-0">Imprint</div>
+            <div class="imprint-container level-1">
+                Responsible for shown content, design and development of this website:<br/>
+                David Wahrenburg — Weizenkampstraße 189, D-28199 Bremen — ©{new Date().getFullYear()} all rights
+                reserved
+            </div>
+        </div>
+
+        <div id="grid"></div>
+
+        <div id="image-container">
+            <button class="close-btn hidden">×</button>
+
+            {projects.map(async (project) => {
+                const {Content} = await project.render();
+                const hasLink = project.data.url && project.data.url !== "";
+
+                return (
+                    <div class="project-content hidden" data-project-slug={project.slug}>
+                        <div class="project-content-wrapper">
+                            <!--<h2>{project.data.title}</h2>
+                            <p class="project-meta">
+                                {project.data.tags.length > 0 && <span><i>{project.data.tags.join(', ')}</i> • </span>}
+                                {project.data.year}
+                                {hasLink && <span> • <a href={`https://${project.data.url}`} target="_blank">Visit Site ↗</a></span>}
+                            </p>-->
+                            <div class="project-body">
+                                <Content/>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+
+        <script is:inline src="/js/script.js"></script>
+    </body>
 </html>
