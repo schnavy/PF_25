@@ -5,6 +5,9 @@ import rehypeTitleFigure from 'rehype-title-figure';
 // https://astro.build/config
 export default defineConfig({
     markdown: {
+        remarkRehype: {
+            allowDangerousHtml: true
+        },
         // @ts-expect-error - rehype-title-figure uses older unified types
         rehypePlugins: [rehypeTitleFigure]
     },
