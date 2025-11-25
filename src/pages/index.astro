@@ -164,21 +164,19 @@ const rand = Math.floor(Math.random() * 6);
         <div id="grid"></div>
 
         <div id="image-container">
-            <button class="close-btn hidden">×</button>
-
             {projects.map(async (project) => {
                 const {Content} = await project.render();
                 const hasLink = project.data.url && project.data.url !== "";
 
                 return (
-                    <div class="project-content hidden" data-project-slug={project.slug}>
+                    <div class="project-content" id={`project-${project.slug}`} data-project-slug={project.slug}>
                         <div class="project-content-wrapper">
-                            <!--<h2>{project.data.title}</h2>
+                            <h2>{project.data.title}</h2>
                             <p class="project-meta">
                                 {project.data.tags.length > 0 && <span><i>{project.data.tags.join(', ')}</i> • </span>}
                                 {project.data.year}
                                 {hasLink && <span> • <a href={`https://${project.data.url}`} target="_blank">Visit Site ↗</a></span>}
-                            </p>-->
+                            </p>
                             <div class="project-body">
                                 <Content/>
                             </div>

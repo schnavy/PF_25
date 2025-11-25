@@ -1,5 +1,5 @@
 // Main script file
-// Project interaction handlers will go here
+// Project interaction and scroll synchronization
 
 document.addEventListener('DOMContentLoaded', () => {
   // Imprint toggle
@@ -12,47 +12,75 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Project click handlers
-  const projectsWithImages = document.querySelectorAll('.has-images');
-  projectsWithImages.forEach(project => {
-    project.addEventListener('click', (e) => {
-      if (!e.target.closest('a')) {
-        const slug = project.id;
-        showProjectContent(slug);
+  // Get containers
+  const imageContainer = document.getElementById('image-container');
+  const projectElements = document.querySelectorAll('.projects-container .level-1');
+
+  if (!imageContainer) return;
+
+  // Click handler: scroll to project in right side
+  projectElements.forEach(projectEl => {
+    projectEl.addEventListener('click', (e) => {
+      // Don't interfere with links
+      if (e.target.closest('a')) return;
+
+      const slug = projectEl.id;
+      const targetProject = document.getElementById(`project-${slug}`);
+
+      if (targetProject) {
+        // Scroll the right container to the project
+        const containerTop = imageContainer.scrollTop;
+        const targetTop = targetProject.offsetTop;
+
+        imageContainer.scrollTo({
+          top: targetTop,
+          behavior: 'smooth'
+        });
       }
     });
   });
 
-  // Function to show project content
-  function showProjectContent(slug) {
-    // Hide all project content
-    document.querySelectorAll('.project-content').forEach(el => {
-      el.classList.add('hidden');
-    });
+  // Scroll handler: highlight active project in left sidebar
+  let ticking = false;
 
-    // Show selected project
-    const projectContent = document.querySelector(`[data-project-slug="${slug}"]`);
-    if (projectContent) {
-      projectContent.classList.remove('hidden');
-
-      // Show close button
-      const closeBtn = document.querySelector('.close-btn');
-      if (closeBtn) {
-        closeBtn.classList.remove('hidden');
-      }
-    }
-  }
-
-  // Close button handler
-  const closeBtn = document.querySelector('.close-btn');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      // Hide all project content
-      document.querySelectorAll('.project-content').forEach(el => {
-        el.classList.add('hidden');
+  imageContainer.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateActiveProject();
+        ticking = false;
       });
-      // Hide close button
-      closeBtn.classList.add('hidden');
+      ticking = true;
+    }
+  });
+
+  function updateActiveProject() {
+    const scrollTop = imageContainer.scrollTop;
+    const containerHeight = imageContainer.clientHeight;
+    const viewportMiddle = scrollTop + (containerHeight / 3); // Use top third for trigger
+
+    const projectContents = document.querySelectorAll('.project-content');
+    let activeSlug = null;
+
+    // Find which project is currently in view
+    projectContents.forEach(project => {
+      const projectTop = project.offsetTop;
+      const projectBottom = projectTop + project.offsetHeight;
+
+      if (viewportMiddle >= projectTop && viewportMiddle < projectBottom) {
+        activeSlug = project.dataset.projectSlug;
+      }
+    });
+
+    // Update active class on left sidebar projects
+    projectElements.forEach(el => {
+      if (el.id === activeSlug) {
+        el.classList.add('project-active');
+      } else {
+        el.classList.remove('project-active');
+      }
     });
   }
+
+  // Initialize on load
+  updateActiveProject();
 });
