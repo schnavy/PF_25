@@ -41,8 +41,8 @@ const rand = Math.floor(Math.random() * 6);
               content="Bremen-based graphic designer and programmer, with a focus on experimental web development."/>
         <meta name="author" content="David Wahrenburg"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="/css/style.css"/>
-        <link rel="shortcut icon" href={`/images/favicon_${rand}.png`} type="image/x-icon"/>
+        <link rel="stylesheet" href={`${import.meta.env.BASE_URL}css/style.css`}/>
+        <link rel="shortcut icon" href={`${import.meta.env.BASE_URL}images/favicon_${rand}.png`} type="image/x-icon"/>
         <title>-.. .- ...- .. -.. / .-- | David Wahrenburg</title>
 
         <script define:vars={{projects}}>
@@ -188,6 +188,6 @@ const rand = Math.floor(Math.random() * 6);
             })}
         </div>
 
-        <script is:inline src="/js/script.js"></script>
+        <script is:inline src={`${import.meta.env.BASE_URL}js/script.js`}></script>
     </body>
 </html>
