@@ -9,5 +9,5 @@ export default defineConfig({
         rehypePlugins: [rehypeTitleFigure]
     },
     site: 'https://schnavy.github.io/',
-    base: '/PF_25',
+    base: '/PF_25/',
 });
