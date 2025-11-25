@@ -169,6 +169,38 @@ figcaption {
     color: var(--text-color);
 }
 
+/* Image grid layout for multiple images side-by-side */
+.image-row {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    width: 100%;
+}
+
+.image-col {
+    flex: 1;
+    min-width: 0;
+}
+
+.image-col figure {
+    max-height: none;
+    width: 100%;
+}
+
+.image-col figure img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+}
+
+/* Responsive: stack on mobile */
+@media (max-width: 768px) {
+    .image-row {
+        flex-direction: column;
+    }
+}
+
 #grid {
     pointer-events: none;
     display: grid;
@@ -204,7 +236,6 @@ figcaption {
     scrollbar-width: none;
     -ms-overflow-style: none;
     background-color: var(--image-background-color);
-    padding: 0.8rem;
 }
 
 #image-container::-webkit-scrollbar {

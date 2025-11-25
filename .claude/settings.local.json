@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m \"$(cat <<''EOF''\nRedesign right side as continuous scrollable project container\n\n- Display all projects continuously in right container instead of toggle view\n- Add scroll synchronization between left/right sides\n- Highlight active project in left sidebar based on scroll position\n- Click project on left to smoothly scroll to it on right\n- Remove close button and toggle functionality (no longer needed)\n- Projects now show title, meta info, and full markdown content\n- Each project section takes minimum full viewport height\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

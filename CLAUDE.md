@@ -154,6 +154,26 @@ More text and context.
 - Images wrapped in `<figure>` tags with captions in `<figcaption>`
 - Broken image paths will fail the build (validates references)
 
+**Two-Column Image Layout:**
+
+To display images side-by-side, use HTML wrapper divs with markdown images inside:
+
+```markdown
+<div class="image-row">
+  <div class="image-col">
+    ![Alt text 1](../../assets/images/project-name/image1.jpg "Caption for first image")
+  </div>
+  <div class="image-col">
+    ![Alt text 2](../../assets/images/project-name/image2.jpg "Caption for second image")
+  </div>
+</div>
+```
+
+- `.image-row` creates a flex container with gap
+- `.image-col` creates equal-width columns (flex: 1)
+- Images automatically stack vertically on mobile (< 768px)
+- Can have 2, 3, or more columns - each `.image-col` gets equal width
+
 **File Naming Convention:**
 - Use numbered prefixes for ordering: `01-cover.jpg`, `02-spread.jpg`
 - Use descriptive names after number: `03-detail-closeup.jpg`
