@@ -8,6 +8,6 @@ export default defineConfig({
         // @ts-expect-error - rehype-title-figure uses older unified types
         rehypePlugins: [rehypeTitleFigure]
     },
-    site: 'http://schnavy.github.io/',
+    site: 'https://schnavy.github.io/',
     base: '/PF_25',
 });
