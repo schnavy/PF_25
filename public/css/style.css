@@ -150,15 +150,10 @@ body {
 }
 
 /* Figure and caption styling for markdown images */
-figure {
-    margin: 0;
-    max-height: 700px;
-}
-
-figure img {
+img {
     width: auto;
     height: auto;
-    max-height: 700px;
+    max-height: 350px;
     max-width: 100%;
     display: block;
 }
@@ -172,8 +167,6 @@ figcaption {
 /* Image grid layout for multiple images side-by-side */
 .image-row {
     display: flex;
-    gap: 1rem;
-    margin: 2rem 0;
     width: 100%;
 }
 
@@ -182,12 +175,11 @@ figcaption {
     min-width: 0;
 }
 
-.image-col figure {
-    max-height: none;
-    width: 100%;
+.image-col p {
+    margin: 0 !important;
 }
 
-.image-col figure img {
+.image-col img {
     width: 100%;
     max-width: 100%;
     height: auto;
@@ -264,8 +256,6 @@ figcaption {
 }
 
 .project-meta {
-    margin-bottom: 1.5rem;
-    opacity: 0.7;
 }
 
 .project-meta a {
