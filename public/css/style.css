@@ -58,7 +58,6 @@ a {
 
 p {
     width: fit-content;
-    max-width: 700px;
 }
 
 body {
@@ -74,14 +73,18 @@ body {
 
 #text-container {
     position: fixed;
-    inset: 0;
+    top: 2rem;
+    left: 2rem;
     right: auto;
-    width: 50vw;
-    height: 100vh;
-    padding: 0.8rem 5rem 0.8rem 0.8rem;
+    width: 400px;
+    height: auto;
+    padding: 0.5rem 0.8rem;
     overflow: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    z-index: 100;
+    background-color: white;
+
 }
 
 #text-container::-webkit-scrollbar {
@@ -153,7 +156,6 @@ body {
 img {
     width: auto;
     height: auto;
-    max-height: 350px;
     max-width: 100%;
     display: block;
 }
@@ -220,8 +222,7 @@ figcaption {
 #image-container {
     position: fixed;
     inset: 0;
-    left: auto;
-    width: 50vw;
+    width: 100vw;
     height: 100vh;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -246,14 +247,15 @@ figcaption {
 }
 
 .project-content-wrapper {
-    max-width: 900px;
 }
 
-.project-content h2 {
-    margin: 0 0 0.5rem 0;
+.project-content h2, .project-content p {
+    margin: 0;
     font-size: 1em;
     font-weight: normal;
+    background-color: #ececec;
 }
+
 
 .project-meta {
 }

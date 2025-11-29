@@ -2,6 +2,8 @@
 title: "Introduction"
 ---
 
-Bremen-based artist working on digital infrastructure, power structures and critical data research. 
+I am David Wahrenburg, a multidisciplinary artist, currently focussing on the materiality of digital infrastructure and the power relation it produces.
 <br/><br/>
-I migrated my practise as a developer and designer to [smallplates.studio](http://smallplates.studio/).
+I migrated my practise as a developer and designer to smallplates.studio.
+Imprint
+

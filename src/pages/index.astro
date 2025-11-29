@@ -91,14 +91,13 @@ const rand = Math.floor(Math.random() * 6);
 
     <body>
         <div id="text-container">
-            <p class="level-0">David Wahrenburg</p>
-            <div class="level-1 intro-content">
+            <div class="level-0 intro-content">
                 {IntroContent &&
                         <IntroContent/>}
             </div>
             <br/>
 
-            <div class="projects-container">
+            <!--<div class="projects-container">
                 <p class="level-0">Selected Projects:</p>
                 {projects.map((project) => {
                     const hasImages = project.data.hasImages && project.data.showImages;
@@ -128,20 +127,20 @@ const rand = Math.floor(Math.random() * 6);
                             </>
                     );
                 })}
-            </div>
+            </div>-->
 
-            <br/>
+   <!--         <br/>
             <p class="level-1">■&nbsp;images <span class="mobile-only">available in desktop view</span></p>
             <p class="level-1">↗&nbsp;hyperlink</p>
-            <br/>
+            <br/>-->
 
-            <div class="timeline-container">
+   <!--         <div class="timeline-container">
                 <p class="level-0">Timeline:</p>
                 <div class="level-1 timeline-content">
                     {TimelineContent &&
                             <TimelineContent/>}
                 </div>
-            </div>
+            </div>-->
 
             <br/>
             <div class="contact-container">
@@ -171,12 +170,6 @@ const rand = Math.floor(Math.random() * 6);
                 return (
                     <div class="project-content" id={`project-${project.slug}`} data-project-slug={project.slug}>
                         <div class="project-content-wrapper">
-                            <h2>{project.data.title}</h2>
-                            <p class="project-meta">
-                                {project.data.tags.length > 0 && <span><i>{project.data.tags.join(', ')}</i> • </span>}
-                                {project.data.year}
-                                {hasLink && <span> • <a href={`https://${project.data.url}`} target="_blank">Visit Site ↗</a></span>}
-                            </p>
                             <div class="project-body">
                                 <Content/>
                             </div>
