@@ -8,25 +8,32 @@ const intro = await getCollection('sections').then(entries =>
 const timeline = await getCollection('sections').then(entries =>
     entries.find(entry => entry.id === 'timeline.md')
 );
-const contact = await getCollection('sections').then(entries =>
-    entries.find(entry => entry.id === 'contact.md')
-);
 
-// Get and sort projects by year (descending) and then by order
-// Filter to only show active projects
-const projects = (await getCollection('projects'))
-    .filter(project => project.data.active)
-    .sort((a, b) => {
-        if (b.data.year !== a.data.year) {
-            return b.data.year - a.data.year;
-        }
-        return a.data.order - b.data.order;
-    });
+// Load curtain images
+const curtainImagesGlob = import.meta.glob('/src/assets/images/curtain/*.{jpg,jpeg,png,webp,gif}', {
+    eager: true,
+    import: 'default'
+});
+const curtainImagePaths = Object.entries(curtainImagesGlob).map(([path, module]) => {
+    // @ts-ignore - module is the imported image object with src property
+    return module.src;
+});
+
+// Shuffle function
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+const shuffledImages = shuffleArray(curtainImagePaths);
 
 // Render markdown content
 const {Content: IntroContent} = intro ? await intro.render() : {Content: null};
 const {Content: TimelineContent} = timeline ? await timeline.render() : {Content: null};
-const {Content: ContactContent} = contact ? await contact.render() : {Content: null};
 
 // Generate random favicon number
 const rand = Math.floor(Math.random() * 6);
@@ -45,31 +52,59 @@ const rand = Math.floor(Math.random() * 6);
         <link rel="shortcut icon" href={`${import.meta.env.BASE_URL}images/favicon_${rand}.png`} type="image/x-icon"/>
         <title>-.. .- ...- .. -.. / .-- | David Wahrenburg</title>
 
-        <script define:vars={{projects}}>
-            let activeArray = projects.map(p => ({
-                title: p.data.title,
-                url: p.data.url,
-                hasImages: p.data.hasImages,
-                showImages: p.data.showImages,
-                tags: p.data.tags,
-                year: p.data.year,
-                slug: p.slug
-            }));
+        <script define:vars={{shuffledImages}}>
+            // Curtain images array for client-side swapping (global scope)
+            window.curtainImagesArray = shuffledImages;
+            window.currentIndex = 2; // Start at index 2 (first two images already displayed)
 
-            // let curtainImgArray = []; // Will be populated when images are added
-            // let tagArray = []; // Will be populated when needed
+            // Random link colors - each link gets a different color
+            const linkColors = [
+                '#d20000', // red
+                '#00b475', // turquoise
+                '#0066ff', // blue
+                '#f64900', // light salmon
+                '#b99a00', // yellow
+                '#8816b4', // purple
+                '#cc7b00', // peach
+                '#903caf'  // lavender
+            ];
 
-            // Preloader placeholder - implement when images are added
-            let thumbs = [];
+            // Apply random colors to each link on page load
 
-            function shuffleArray(array) {
-                for (var i = array.length - 1; i > 0; i--) {
-                    var j = Math.floor(Math.random() * (i + 1));
-                    var temp = array[i];
-                    array[i] = array[j];
-                    array[j] = temp;
-                }
+
+            // Helper function to extract filename from path
+            window.getFilenameFromPath = (path) => {
+                const parts = path.split('/');
+                const filenameWithHash = parts[parts.length - 1];
+                // Remove hash and extension for cleaner display
+                const filename = filenameWithHash.split('.')[0];
+                return filename + ".jpg";
+            };
+
+            let changeColors = () => {
+                const links = document.querySelectorAll('a');
+                links.forEach(link => {
+                    link.style.color = linkColors[Math.floor(Math.random() * linkColors.length)];
+                });
+                const textCOntainer = document.getElementById('text-container');
+                textCOntainer.style.borderColor = linkColors[Math.floor(Math.random() * linkColors.length)];
             }
+            document.addEventListener('DOMContentLoaded', () => {
+                changeColors();
+
+                // Set initial filenames
+                const leftImg = document.getElementById('curtain-img-left');
+                const rightImg = document.getElementById('curtain-img-right');
+                const leftFilename = document.getElementById('filename-left');
+                const rightFilename = document.getElementById('filename-right');
+
+                if (leftImg && leftFilename) {
+                    leftFilename.textContent = window.getFilenameFromPath(leftImg.src);
+                }
+                if (rightImg && rightFilename) {
+                    rightFilename.textContent = window.getFilenameFromPath(rightImg.src);
+                }
+            });
 
             // Matomo Analytics
             var _paq = window._paq = window._paq || [];
@@ -95,7 +130,6 @@ const rand = Math.floor(Math.random() * 6);
                 {IntroContent &&
                         <IntroContent/>}
             </div>
-            <br/>
 
             <!--<div class="projects-container">
                 <p class="level-0">Selected Projects:</p>
@@ -129,54 +163,46 @@ const rand = Math.floor(Math.random() * 6);
                 })}
             </div>-->
 
-   <!--         <br/>
-            <p class="level-1">■&nbsp;images <span class="mobile-only">available in desktop view</span></p>
-            <p class="level-1">↗&nbsp;hyperlink</p>
-            <br/>-->
+            <!--         <br/>
+                     <p class="level-1">■&nbsp;images <span class="mobile-only">available in desktop view</span></p>
+                     <p class="level-1">↗&nbsp;hyperlink</p>
+                     <br/>-->
 
-   <!--         <div class="timeline-container">
-                <p class="level-0">Timeline:</p>
-                <div class="level-1 timeline-content">
-                    {TimelineContent &&
-                            <TimelineContent/>}
-                </div>
-            </div>-->
-
-            <br/>
-            <div class="contact-container">
-                <p class="level-0 contact">Contact me:</p>
-                <div class="level-1 contact-content">
-                    {ContactContent &&
-                            <ContactContent/>}
-                </div>
-            </div>
-
+            <!--         <div class="timeline-container">
+                         <p class="level-0">Timeline:</p>
+                         <div class="level-1 timeline-content">
+                             {TimelineContent &&
+                                     <TimelineContent/>}
+                         </div>
+                     </div>-->
             <br/>
             <div id="impressum-btn" class="level-0">Imprint</div>
-            <div class="imprint-container level-1">
+            <div class="imprint-container level-0">
+                <br/>
                 Responsible for shown content, design and development of this website:<br/>
-                David Wahrenburg — Weizenkampstraße 189, D-28199 Bremen — ©{new Date().getFullYear()} all rights
+                David Wahrenburg — Weizenkampstraße 189, D-28199 Bremen<br/>
+                ©{new Date().getFullYear()} all rights
                 reserved
+                <br/><br/>
+                Free Palestine! 🍉
             </div>
         </div>
 
         <div id="grid"></div>
 
         <div id="image-container">
-            {projects.map(async (project) => {
-                const {Content} = await project.render();
-                const hasLink = project.data.url && project.data.url !== "";
-
-                return (
-                    <div class="project-content" id={`project-${project.slug}`} data-project-slug={project.slug}>
-                        <div class="project-content-wrapper">
-                            <div class="project-body">
-                                <Content/>
-                            </div>
-                        </div>
+            {shuffledImages.length >= 2 && (
+                    <>
+                    <div class="curtain-column" data-column="left">
+                        <img id="curtain-img-left" src={shuffledImages[0]} alt=""/>
+                        <div class="image-filename" id="filename-left"></div>
                     </div>
-                );
-            })}
+                    <div class="curtain-column" data-column="right">
+                        <img id="curtain-img-right" src={shuffledImages[1]} alt=""/>
+                        <div class="image-filename" id="filename-right"></div>
+                    </div>
+                    </>
+            )}
         </div>
 
         <script is:inline src={`${import.meta.env.BASE_URL}js/script.js`}></script>
