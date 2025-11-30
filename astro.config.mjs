@@ -9,12 +9,10 @@ export default defineConfig({
         remarkRehype: {
             allowDangerousHtml: true
         },
-        // @ts-expect-error - rehype-title-figure uses older unified types
         rehypePlugins: [
             rehypeRaw, // Process HTML and markdown inside it
             rehypeTitleFigure
         ]
     },
-    site: 'https://schnavy.github.io/',
-    base: '/PF_25/',
+    site: 'https://davidwahrenburg.de/',
 });
