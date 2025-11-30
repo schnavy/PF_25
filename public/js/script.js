@@ -3,6 +3,32 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Mobile info toggle
+  const textContainer = document.getElementById('text-container');
+
+  if (textContainer) {
+    textContainer.addEventListener('click', (e) => {
+      // Only toggle on mobile
+      if (window.innerWidth <= 1000) {
+        // Check if clicking on the close button (::after pseudo-element area)
+        const rect = textContainer.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        // If container is open (default) and clicked near bottom-right (close button area)
+        if (!textContainer.classList.contains('mobile-closed')) {
+          const isCloseButton = clickX > rect.width - 40 && clickY > rect.height - 40;
+          if (isCloseButton) {
+            textContainer.classList.add('mobile-closed');
+          }
+        } else {
+          // If closed, open it
+          textContainer.classList.remove('mobile-closed');
+        }
+      }
+    });
+  }
+
   // Imprint toggle
   const impressumBtn = document.getElementById('impressum-btn');
   const imprintContainer = document.querySelector('.imprint-container');

@@ -2,13 +2,10 @@
 title: "Introduction"
 ---
 
-I am an interdisciplinary artist, based in Bremen (Germany), with a background in computer science and
-graphic design.
+I am an interdisciplinary artist based in Bremen (Germany), with a background in computer science and graphic design.
 <br/><br/>
-My research-based practise currently wanders around the exploitation
-of data, human labor and natural recourses in digital infrastructure and large scale systems, following traces of
-post-colonial and/or
-economic and/or political power structures.
+My research-based practice currently revolves around the exploitation of data, human labour, and natural resources in
+digital infrastructure and large-scale systems, tracing post-colonial and/or economic and/or political power structures.
 
 <br/>
 

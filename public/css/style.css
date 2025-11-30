@@ -20,7 +20,6 @@
     --background-color-contrast: white;
     --text-color: black;
     --link-color: #858585;
-    --border-color: #313131;
     --image-background-color: rgb(222, 222, 222);
 }
 
@@ -29,7 +28,6 @@
         --background-color: #151515;
         --background-color-contrast: black;
         --text-color: white;
-        --border-color: #f7f8fa;
         --image-background-color: rgb(41, 42, 48);
     }
 }
@@ -46,22 +44,6 @@ html {
     letter-spacing: -0.01rem;
 }
 
-@media (max-width: 1000px) {
-    html {
-        font-size: 96%;
-    }
-}
-
-a {
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-p {
-    width: fit-content;
-    text-wrap: pretty;
-}
-
 body {
     height: 100vh;
     display: flex;
@@ -73,8 +55,24 @@ body {
     color: var(--text-color);
 }
 
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+@media (min-width: 1000px) {
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
+p {
+    width: fit-content;
+    text-wrap: pretty;
+}
+
 hr {
-    margin: .3rem -0.6rem;
+    margin: 0.2rem -0.6rem 0 -0.6rem;
     border-width: 3px;
     border-style: dotted;
     border-bottom: none;
@@ -83,12 +81,11 @@ hr {
 
 #text-container {
     position: fixed;
-    top: 2rem;
+    top: 1rem;
     left: auto;
     right: auto;
-    width: 350px;
-    max-width: 95vw;
-    height: auto;
+    width: 22rem;
+    max-width: calc(100vw - 2rem);
     padding: 0.6rem;
     overflow: scroll;
     scrollbar-width: none;
@@ -102,65 +99,34 @@ hr {
     display: none;
 }
 
-@media (min-width: 1000px) {
-    a:hover {
-        /*color: var(--background-color);
-        background-color: var(--text-color);*/
-        width: fit-content;
-        text-decoration: underline !important;
-    }
-}
-
+/* Content sections */
 .level-0 {
     margin-left: 0;
 }
 
-.level-1 {
-    margin-left: 1.5rem;
-}
-
-.level-2 {
-    margin-left: 3rem;
-}
-
-/* Markdown content styling */
-.intro-content p,
-.contact-content p {
+.intro-content p {
     margin-left: 0;
 }
 
-#grid {
-    pointer-events: none;
-    display: grid;
-    position: fixed;
-    inset: 0;
-    left: calc(50vw - 100px);
-    z-index: 100;
-    grid-template-columns: repeat(auto-fill, minmax(12px, 1fr));
-    grid-template-rows: repeat(auto-fill, minmax(18px, 1fr));
-    overflow: hidden;
+/* Imprint toggle */
+#impressum-btn {
+    cursor: pointer;
 }
 
-.grid-cell {
-    width: 12px;
-    height: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: monospace;
-    font-size: 14px;
-    visibility: hidden;
-    pointer-events: none;
+.imprint-container {
+    display: none;
 }
 
-/* Curtain image layout */
+.imprint-container.open {
+    display: block;
+}
+
 #image-container {
     position: fixed;
     inset: 0;
     width: 100vw;
     height: 100vh;
     display: flex;
-    cursor: pointer;
     overflow: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -176,6 +142,7 @@ hr {
     height: 100vh;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
 }
 
 .curtain-column img {
@@ -187,23 +154,23 @@ hr {
 
 .image-filename {
     position: absolute;
-    bottom: .5rem;
-    left: .5rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
     color: black;
     pointer-events: none;
     z-index: 10;
 }
 
-#impressum-btn {
-    cursor: pointer;
-}
-
-.imprint-container {
-    display: none;
-}
-
-.imprint-container.open {
-    display: block;
+#grid {
+    pointer-events: none;
+    display: grid;
+    position: fixed;
+    inset: 0;
+    left: calc(50vw - 100px);
+    z-index: 100;
+    grid-template-columns: repeat(auto-fill, minmax(12px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(18px, 1fr));
+    overflow: hidden;
 }
 
 .mobile-only {
@@ -211,19 +178,58 @@ hr {
 }
 
 @media (max-width: 1000px) {
-
-    .level-1 {
-        margin-left: 1.4rem;
+    html {
+        font-size: 96%;
     }
 
-    .level-2 {
-        margin-left: 2.8rem;
+    .mobile-only {
+        display: block;
     }
 
+    /* Text container - centered and toggleable */
+    #text-container {
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+    }
+
+    #text-container-content {
+        display: block;
+    }
+
+    /* Closed state */
+    #text-container.mobile-closed {
+        cursor: pointer;
+    }
+
+    #text-container.mobile-closed #text-container-content {
+        display: none;
+    }
+
+    #text-container.mobile-closed::before {
+        content: "Info ↓";
+    }
+
+    /* Open state - show close button */
+    #text-container::after {
+        content: "↑";
+        position: absolute;
+        bottom: 0.6rem;
+        right: 0.6rem;
+        cursor: pointer;
+    }
+
+    #text-container.mobile-closed::after {
+        content: "";
+    }
+
+    /* Hide grid overlay */
     #grid {
         display: none;
     }
 
+    /* Single column image layout */
     #image-container {
         display: block;
     }
@@ -235,9 +241,5 @@ hr {
 
     .curtain-column:last-child {
         display: none;
-    }
-
-    .mobile-only {
-        display: inline;
     }
 }

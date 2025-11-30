@@ -33,7 +33,6 @@ const shuffledImages = shuffleArray(curtainImagePaths);
 
 // Render markdown content
 const {Content: IntroContent} = intro ? await intro.render() : {Content: null};
-const {Content: TimelineContent} = timeline ? await timeline.render() : {Content: null};
 
 // Generate random favicon number
 const rand = Math.floor(Math.random() * 6);
@@ -86,8 +85,12 @@ const rand = Math.floor(Math.random() * 6);
                 links.forEach(link => {
                     link.style.color = linkColors[Math.floor(Math.random() * linkColors.length)];
                 });
-                const textCOntainer = document.getElementById('text-container');
-                textCOntainer.style.borderColor = linkColors[Math.floor(Math.random() * linkColors.length)];
+                const textContainer = document.getElementById('text-container');
+                textContainer.style.borderColor = linkColors[Math.floor(Math.random() * linkColors.length)];
+                const hrs = document.querySelectorAll('hr');
+                hrs.forEach(hr => {
+                    hr.style.borderColor = linkColors[Math.floor(Math.random() * linkColors.length)];
+                });
             }
             document.addEventListener('DOMContentLoaded', () => {
                 changeColors();
@@ -126,67 +129,24 @@ const rand = Math.floor(Math.random() * 6);
 
     <body>
         <div id="text-container">
-            <div class="level-0 intro-content">
-                {IntroContent &&
-                        <IntroContent/>}
-            </div>
-
-            <!--<div class="projects-container">
-                <p class="level-0">Selected Projects:</p>
-                {projects.map((project) => {
-                    const hasImages = project.data.hasImages && project.data.showImages;
-                    const hasLink = project.data.url && project.data.url !== "";
-
-                    return (
-                            <>
-                            <p
-                                    class:list={[
-                                        "level-1",
-                                        {"has-images": hasImages},
-                                        {"has-link": hasLink}
-                                    ]}
-                                    id={project.slug}
-                            >
-                                {project.data.title}
-                                {hasImages && <span>■</span>}
-                                {hasLink && (
-                                        <a href={`https://${project.data.url}`} target="_blank">
-                                            ↗
-                                        </a>
-                                )}
-                            </p>
-                            <p class="level-2">
-                                (<i>{project.data.tags.length > 0 && `${project.data.tags.join(', ')}, `}</i>{project.data.year})
-                            </p>
-                            </>
-                    );
-                })}
-            </div>-->
-
-            <!--         <br/>
-                     <p class="level-1">■&nbsp;images <span class="mobile-only">available in desktop view</span></p>
-                     <p class="level-1">↗&nbsp;hyperlink</p>
-                     <br/>-->
-
-            <!--         <div class="timeline-container">
-                         <p class="level-0">Timeline:</p>
-                         <div class="level-1 timeline-content">
-                             {TimelineContent &&
-                                     <TimelineContent/>}
-                         </div>
-                     </div>-->
-            <br/>
-            <div id="impressum-btn" class="level-0">Imprint</div>
-            <div class="imprint-container level-0">
+            <div id="text-container-content">
+                <div class="intro-content">
+                    {IntroContent &&
+                            <IntroContent/>}
+                </div>
                 <br/>
-                Responsible for shown content, design and development of this website:<br/>
-                David Wahrenburg<br/>
-                Weizenkampstraße 189<br/>
-                D-28199 Bremen<br/>
-                ©{new Date().getFullYear()} all rights
-                reserved
-                <br/><br/>
-                Free Palestine! 🍉
+                <span id="impressum-btn">Imprint</span>
+                <div class="imprint-container">
+                    <br/>
+                    Responsible for shown content, design and development of this website:<br/>
+                    David Wahrenburg<br/>
+                    Weizenkampstraße 189<br/>
+                    D-28199 Bremen<br/>
+                    ©{new Date().getFullYear()} all rights
+                    reserved
+                    <br/><br/>
+                    Free Palestine! 🍉
+                </div>
             </div>
         </div>
 
