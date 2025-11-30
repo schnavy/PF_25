@@ -2,6 +2,7 @@
 import {defineConfig} from 'astro/config';
 import rehypeTitleFigure from 'rehype-title-figure';
 import rehypeRaw from 'rehype-raw';
+import rehypeExternalLinks from 'rehype-external-links';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +12,9 @@ export default defineConfig({
         },
         rehypePlugins: [
             rehypeRaw, // Process HTML and markdown inside it
-            rehypeTitleFigure
+            // @ts-ignore
+            rehypeTitleFigure,
+            [rehypeExternalLinks, { target: '_blank' }]
         ]
     },
     site: 'https://davidwahrenburg.de/',
