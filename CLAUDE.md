@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a portfolio website for David Wahrenburg, built with Astro 5 using a markdown-based content management system. The site features a two-column layout: left side displays text content (intro, projects list, timeline, contact), right side is reserved for future project imagery/content.
+This is an interim portfolio website for David Wahrenburg, built with Astro 5. The current implementation is a "curtain" image display - a two-column layout showing random images from a collection. The site includes a minimal info box with intro and contact information.
+
+**Deployment:** GitHub Pages at `https://schnavy.github.io/PF_25/`
 
 ## Development Commands
 
@@ -14,219 +16,144 @@ npm run build    # Build production site to ./dist/
 npm run preview  # Preview production build locally
 ```
 
-## Architecture
+## Architecture Overview
+
+### Core Concept: Random Image Display
+
+The site displays two random images side-by-side (desktop) or one image (mobile) from the curtain collection. Images are shuffled at **build time** and clicking an image swaps it for the next one in the shuffled array.
+
+### Key Technical Decisions
+
+1. **Build-time image loading**: Images are loaded using `import.meta.glob()` with `eager: true` to get Astro's optimized image objects
+2. **Static randomization**: Shuffle happens during SSG (Static Site Generation), not runtime
+3. **Client-side swapping**: After initial load, JavaScript cycles through the pre-shuffled array
+4. **Random colors**: Links, borders, and HR elements get random colors on each page load
+
+### File Structure
+
+```
+src/
+├── pages/
+│   └── index.astro           # Single-page site with all logic
+├── content/
+│   ├── config.ts             # Content collections schema
+│   ├── sections/             # Markdown content (intro, timeline, contact)
+│   │   ├── intro.md         # Currently displayed
+│   │   ├── timeline.md      # Not currently displayed
+│   │   └── contact.md       # Not currently displayed (was removed)
+│   └── projects/             # Project collection (kept for future use, not displayed)
+└── assets/
+    └── images/
+        └── curtain/          # ADD IMAGES HERE - auto-optimized by Astro
+
+public/
+├── css/
+│   └── style.css            # All styles, organized by section
+├── js/
+│   └── script.js            # Imprint toggle, image swapping, mobile info toggle
+├── fonts/
+│   └── GT-Pressura-Mono-Text (woff/woff2)
+└── images/
+    └── favicon_*.png        # 6 favicons, randomly selected on each load
+```
 
 ### Content Collections System
 
-The site uses Astro Content Collections with two main collections defined in `src/content/config.ts`:
-
-**Projects Collection** (`src/content/projects/`):
-- Each project is a separate markdown file
-- Required fields: `title` (string), `year` (number)
-- Optional fields: `url` (string, without https://), `hasImages` (boolean), `showImages` (boolean), `tags` (string array), `order` (number)
-- Projects auto-sort by year (descending), then by order field (ascending)
-- Images embedded in markdown body using standard syntax with automatic optimization
-- Note: No `slug` field in schema—Astro auto-generates from filename
+The site uses Astro Content Collections, though most are not currently active:
 
 **Sections Collection** (`src/content/sections/`):
-- Three fixed files: `intro.md`, `timeline.md`, `contact.md`
-- Retrieved by exact filename match: `entry.id === 'intro.md'`
-- Content rendered as markdown in respective page sections
+- `intro.md` - Currently displayed in info box
+- `timeline.md`, `contact.md` - Defined but not displayed
+- Retrieved by exact filename: `entry.id === 'intro.md'`
 
-### Layout Structure
+**Projects Collection** (`src/content/projects/`):
+- Schema exists but collection is not displayed
+- Kept for future portfolio restoration
+- Schema includes: title, year, url, hasImages, tags, order, active
 
-**Left Column** (`#text-container`, 50vw):
-- Fixed position, scrollable, contains all text content
-- Level-based indentation system via CSS classes (`.level-0`, `.level-1`, `.level-2`)
-- Interactive elements: `.has-images` (clickable projects), `.has-link` (external links)
-- Imprint toggle functionality
+### Image Handling
 
-**Right Column** (`#image-container`, 50vw):
-- Fixed position, currently placeholder for future image display
-- Includes grid overlay (`#grid`) for visual effects
-- Contains image wrapper structure ready for project imagery
+**Curtain Images** (`src/assets/images/curtain/`):
+- Loaded at build time via `import.meta.glob('/src/assets/images/curtain/*.{jpg,jpeg,png,webp,gif}')`
+- Automatically optimized to WebP by Astro
+- Shuffled server-side, passed to client as array
+- Client displays first two, cycles through on click
 
-**Mobile** (< 1000px):
-- Right column hidden
-- Left column expands to full width
-- Image indicators show "available in desktop view" message
+**Image Display**:
+- Desktop: Two 50vw columns, `object-fit: cover`
+- Mobile: Single full-width image, second column hidden
+- Filename displayed in bottom-left corner (extracted from path, hash removed)
 
-### Client-Side JavaScript
+### Client-Side Behavior
 
-**Public Assets** (`public/js/`):
-- Scripts loaded with `is:inline` directive (not bundled by Vite)
-- `script.js`: Handles imprint toggle, project click events, close button
-- `curtain.js`: Grid animation effects for right column
-- Both scripts wait for `DOMContentLoaded` before initializing
+**Random Colors** (on page load):
+- Each link gets a random color from predefined palette
+- Text container border gets random color
+- HR elements get random colors
+- Colors defined in `index.astro` inline script
 
-**Inline Script** (in `index.astro`):
-- Uses `define:vars` to pass server-side `projects` data to client
-- Creates `activeArray` with project metadata for client-side interactions
-- Includes Matomo analytics setup
+**Image Swapping**:
+- Click on image column swaps only that image
+- Cycles through `curtainImagesArray` (shuffled at build time)
+- Updates filename display automatically
 
-### Styling System
+**Mobile Info Toggle**:
+- Default: Info box open, shows "↑" close button
+- Click "↑": Minimizes to "Info ↓"
+- Click "Info ↓": Reopens full content
+- JavaScript detects click position to determine close vs. open
 
-**CSS Variables** (`public/css/style.css`):
-- Light/dark mode support via `prefers-color-scheme`
-- Custom properties: `--background-color`, `--text-color`, `--border-color`, `--image-background-color`
+### Styling Architecture
 
-**Font Loading**:
-- GT-Pressura-Mono-Text (regular and italic) with `font-display: swap`
-- Fonts expected in `public/fonts/` directory
+**CSS Organization** (`public/css/style.css`):
+1. Fonts (GT-Pressura-Mono-Text)
+2. CSS Variables (colors, light/dark mode)
+3. Base Styles (resets, typography)
+4. Text Container (info box)
+5. Image Container (curtain columns)
+6. Grid Overlay (empty, kept for future use)
+7. Mobile Styles (< 1000px breakpoint)
 
-**Responsive Breakpoint**: 1000px
-- Above: Two-column layout with hover interactions
-- Below: Single column, simplified layout
+**Key Styles**:
+- Text container: Fixed position, top-left, white background, black border
+- Mobile: Centered horizontally, toggleable with pseudo-elements
+- Images: Full column height/width, `object-fit: cover`
 
-### Asset Organization
+### Important Implementation Notes
 
-```
-public/
-├── css/style.css          # Main stylesheet
-├── fonts/                 # GT-Pressura-Mono-Text font files
-├── images/
-│   ├── favicon_0.png      # Random favicon selection (0-5)
-│   ├── ...favicon_5.png
-│   └── load.svg           # Loading animation
-└── js/
-    ├── script.js          # Main interactions
-    └── curtain.js         # Grid effects
+**Markdown Processing**:
+- Uses `rehype-raw` to process HTML inside markdown
+- Uses `rehype-title-figure` to wrap images in `<figure>` tags
+- `allowDangerousHtml: true` enables HTML in markdown files
 
-src/assets/
-└── images/                # Optimized project images
-    ├── gruppenbild/       # Per-project subdirectories
-    └── [other-projects]/
-```
+**Random Favicon**:
+- 6 favicon files (`favicon_0.png` through `favicon_5.png`)
+- Randomly selected at build time: `Math.floor(Math.random() * 6)`
 
-## Key Implementation Details
+**Analytics**:
+- Matomo analytics configured in inline script
+- Tracker URL: `webstat.davidwahrenburg.de`
 
-### Adding New Projects
+**Grid Overlay**:
+- `#grid` element exists but has no children
+- CSS defines grid structure, kept for future effects
 
-1. Create markdown file in `src/content/projects/` with kebab-case filename
-2. Filename becomes the slug (accessible via `project.slug` not `project.data.slug`)
-3. Only `title` and `year` are required; all other fields have defaults
-4. Project appears automatically after dev server refresh
+## Adding Curtain Images
 
-### Project Image Workflow
+1. Place images in `src/assets/images/curtain/`
+2. Supported formats: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`
+3. Images are automatically:
+   - Loaded via `import.meta.glob()`
+   - Optimized to WebP during build
+   - Shuffled randomly
+   - Made available to client
 
-**Storage Location:** `src/assets/images/[project-name]/`
+## Future Restoration
 
-Images are stored in the optimized assets directory for automatic WebP conversion, responsive sizing, and build-time validation. Each project gets its own subdirectory.
+The codebase maintains infrastructure for a full portfolio site:
+- Project collection schema in `src/content/config.ts`
+- Project markdown files still exist in `src/content/projects/`
+- Commented-out HTML for project display in `index.astro`
+- Timeline and contact sections defined but not displayed
 
-**Directory Structure:**
-```
-src/assets/images/
-├── gruppenbild/
-│   ├── 01-cover.jpg
-│   ├── 02-spread.jpg
-│   └── 03-detail.jpg
-└── loading-state/
-    └── 01-hero.jpg
-```
-
-**Markdown Image Syntax:**
-
-Use standard markdown syntax with optional captions in the project body content:
-
-```markdown
----
-title: "Project Name"
-hasImages: true
-showImages: true
-year: 2024
----
-
-Project description text here.
-
-![Alt text for accessibility](../../assets/images/project-name/01-cover.jpg "Optional caption displayed below image")
-
-More text and context.
-
-![Another descriptive alt text](../../assets/images/project-name/02-detail.jpg "Another caption")
-```
-
-**Key Points:**
-- Use standard markdown syntax: `![alt](path "caption")`
-- Path is relative from markdown file: `../../assets/images/[project-name]/[filename]`
-- Alt text (required) comes first in square brackets
-- Caption (optional) comes after path in quotes
-- Images automatically optimized to WebP during build
-- Images wrapped in `<figure>` tags with captions in `<figcaption>`
-- Broken image paths will fail the build (validates references)
-
-**Two-Column Image Layout:**
-
-To display images side-by-side, use HTML wrapper divs with markdown images inside:
-
-```markdown
-<div class="image-row">
-  <div class="image-col">
-    ![Alt text 1](../../assets/images/project-name/image1.jpg "Caption for first image")
-  </div>
-  <div class="image-col">
-    ![Alt text 2](../../assets/images/project-name/image2.jpg "Caption for second image")
-  </div>
-</div>
-```
-
-- `.image-row` creates a flex container with gap
-- `.image-col` creates equal-width columns (flex: 1)
-- Images automatically stack vertically on mobile (< 768px)
-- Can have 2, 3, or more columns - each `.image-col` gets equal width
-
-**File Naming Convention:**
-- Use numbered prefixes for ordering: `01-cover.jpg`, `02-spread.jpg`
-- Use descriptive names after number: `03-detail-closeup.jpg`
-- Supports: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`, `.svg`
-
-**Plugin Configuration:**
-The site uses `rehype-title-figure` plugin (configured in `astro.config.mjs`) to automatically wrap markdown images in semantic HTML:
-
-**Input (Markdown):**
-```markdown
-![Alt text](image.jpg "Caption text")
-```
-
-**Output (HTML):**
-```html
-<figure>
-  <img src="image.jpg" alt="Alt text" title="Caption text">
-  <figcaption>Caption text</figcaption>
-</figure>
-```
-
-**Styling:**
-Figure and caption styles are defined in `public/css/style.css`:
-- Figures have 2rem vertical margins
-- Images are responsive (width: 100%)
-- Captions are italicized with reduced opacity
-
-### Content Rendering Pattern
-
-Sections use conditional rendering to handle missing content:
-```javascript
-const { Content: IntroContent } = intro ? await intro.render() : { Content: null };
-{IntroContent && <IntroContent />}
-```
-
-### Hover Interactions
-
-Projects with images or links get interactive hover states:
-- `.has-images` projects are clickable (show images in future)
-- `.has-link` projects contain external links with `↗` indicator
-- Both show visual feedback on hover (inverted colors)
-
-### Future Development Notes
-
-- Right column structure ready for project image display
-- Click handlers in `script.js` prepared for image gallery functionality
-- Project markdown body content available but not yet displayed
-- Grid overlay system in place for curtain animation effects
-
-## Astro-Specific Patterns
-
-- Content collections require both `schema` definition and `getCollection()` calls
-- Section retrieval uses `.id` which includes file extension: `'intro.md'`
-- Project slugs generated from filename, accessed via `project.slug` not `project.data.slug`
-- Client scripts in `public/` need `is:inline` directive to bypass Vite bundling
-- `define:vars` passes server data to inline scripts as JavaScript variables
+To restore, uncomment the relevant sections in `index.astro` and update which content collections are rendered.
