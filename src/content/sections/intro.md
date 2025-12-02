@@ -2,7 +2,7 @@
 title: "Introduction"
 ---
 
-Hello, I am David Wahrenburg, an interdisciplinary artist based in Bremen (Germany), with a background in computer science and graphic design.
+I (David Wahrenburg) am an inter&shy;disciplinary artist based in Bremen, Germany, with a background in computer science and graphic design.
 <br/><br/>
 My research-based practice currently revolves around the exploitation of data, human labour, and natural resources in
 digital infrastructure and large-scale systems, tracing post-colonial and/or economic and/or political power structures.
@@ -13,7 +13,9 @@ digital infrastructure and large-scale systems, tracing post-colonial and/or eco
 
 <br/>
 
-Regarding my work as a developer and designer, please visit [smallplates.studio](https://smallplates.studio/).
+Regarding my work as a developer <br/>
+and designer, please visit:
+[smallplates.studio](https://smallplates.studio/)
 
 <br/>
 

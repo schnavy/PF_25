@@ -23,15 +23,6 @@
     --image-background-color: rgb(222, 222, 222);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: #151515;
-        --background-color-contrast: black;
-        --text-color: white;
-        --image-background-color: rgb(41, 42, 48);
-    }
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -73,8 +64,8 @@ p {
 
 hr {
     margin: 0.2rem -0.6rem 0 -0.6rem;
-    border-width: 3px;
-    border-style: dotted;
+    border-width: 2px;
+    border-style: dashed;
     border-bottom: none;
     border-color: #bebebe;
 }
@@ -92,7 +83,7 @@ hr {
     -ms-overflow-style: none;
     z-index: 100;
     background-color: white;
-    border-top: 3px solid black;
+    border-top: 2px solid black;
 }
 
 #text-container::-webkit-scrollbar {
