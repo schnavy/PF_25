@@ -19,6 +19,16 @@ const curtainImagePaths = Object.entries(curtainImagesGlob).map(([path, module])
     return module.src;
 });
 
+// Sound files paths (served from public folder)
+const soundPaths = [
+    `${import.meta.env.BASE_URL}sounds/plop1.mp3`,
+    `${import.meta.env.BASE_URL}sounds/plop2.mp3`,
+    `${import.meta.env.BASE_URL}sounds/plop3.mp3`,
+    `${import.meta.env.BASE_URL}sounds/plop4.mp3`,
+    `${import.meta.env.BASE_URL}sounds/plop5.mp3`,
+    `${import.meta.env.BASE_URL}sounds/plop6.mp3`
+];
+
 // Shuffle function
 function shuffleArray(array) {
     const arr = [...array];
@@ -51,10 +61,13 @@ const rand = Math.floor(Math.random() * 6);
         <link rel="shortcut icon" href={`${import.meta.env.BASE_URL}images/favicon_${rand}.png`} type="image/x-icon"/>
         <title>David Wahrenburg</title>
 
-        <script define:vars={{shuffledImages}}>
+        <script define:vars={{shuffledImages, soundPaths}}>
             // Curtain images array for client-side swapping (global scope)
             window.curtainImagesArray = shuffledImages;
             window.currentIndex = 2; // Start at index 2 (first two images already displayed)
+
+            // Sound files array for click sounds
+            window.soundPaths = soundPaths;
 
             // Random link colors - each link gets a different color
             const linkColors = [

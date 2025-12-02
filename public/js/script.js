@@ -58,6 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Play random sound
+    if (window.soundPaths && window.soundPaths.length > 0) {
+      const randomSound = window.soundPaths[Math.floor(Math.random() * window.soundPaths.length)];
+      const audio = new Audio(randomSound);
+      audio.volume = 0.5;
+      audio.play().catch(err => console.log('Audio play failed:', err));
+    }
+
     // Get next image from shuffled array
     const newSrc = window.curtainImagesArray[window.currentIndex % window.curtainImagesArray.length];
     img.src = newSrc;
