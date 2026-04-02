@@ -108,17 +108,27 @@ const rand = Math.floor(Math.random() * 6);
             document.addEventListener('DOMContentLoaded', () => {
                 changeColors();
 
-                // Set initial filenames
                 const leftImg = document.getElementById('curtain-img-left');
                 const rightImg = document.getElementById('curtain-img-right');
                 const leftFilename = document.getElementById('filename-left');
                 const rightFilename = document.getElementById('filename-right');
 
+                // Pick a random starting index so initial images differ on every load
+                const startIndex = Math.floor(Math.random() * window.curtainImagesArray.length);
+                const leftSrc = window.curtainImagesArray[startIndex];
+                const rightSrc = window.curtainImagesArray[(startIndex + 1) % window.curtainImagesArray.length];
+
+                if (leftImg) leftImg.src = leftSrc;
+                if (rightImg) rightImg.src = rightSrc;
+
+                // Next swap continues from after these two
+                window.currentIndex = (startIndex + 2) % window.curtainImagesArray.length;
+
                 if (leftImg && leftFilename) {
-                    leftFilename.textContent = window.getFilenameFromPath(leftImg.src);
+                    leftFilename.textContent = window.getFilenameFromPath(leftSrc);
                 }
                 if (rightImg && rightFilename) {
-                    rightFilename.textContent = window.getFilenameFromPath(rightImg.src);
+                    rightFilename.textContent = window.getFilenameFromPath(rightSrc);
                 }
             });
 
@@ -169,11 +179,11 @@ const rand = Math.floor(Math.random() * 6);
             {shuffledImages.length >= 2 && (
                     <>
                     <div class="curtain-column" data-column="left">
-                        <img id="curtain-img-left" src={shuffledImages[0]} alt=""/>
+                        <img id="curtain-img-left" src="" alt=""/>
                         <div class="image-filename" id="filename-left"></div>
                     </div>
                     <div class="curtain-column" data-column="right">
-                        <img id="curtain-img-right" src={shuffledImages[1]} alt=""/>
+                        <img id="curtain-img-right" src="" alt=""/>
                         <div class="image-filename" id="filename-right"></div>
                     </div>
                     </>
