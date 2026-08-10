@@ -367,21 +367,34 @@ hr {
         height: 100vw;
     }
 
-    /* Stack the detail view's text/gallery columns instead of splitting 50/50 */
+    /* Stack the detail view's text/gallery in one scroll context (text
+       first, then images) instead of splitting 50/50 with independent
+       scroll areas. */
     #project-detail.open {
         flex-direction: column;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     #project-detail-info {
         width: 100vw;
         max-width: 100vw;
         height: auto;
-        max-height: 40vh;
+        overflow-y: visible;
+        flex: none;
+        transform: translateX(0);
     }
 
     #project-detail-gallery-wrapper {
+        position: static;
         width: 100vw;
         height: auto;
-        flex: 1;
+        overflow: visible;
+        flex: none;
+    }
+
+    #project-detail-gallery {
+        height: auto;
+        overflow-y: visible;
     }
 }

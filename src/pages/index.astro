@@ -50,15 +50,11 @@ const curtainImages = (await Promise.all(
     })
 )).flat();
 
-// Render each project's desc.md (if any) once, up front, into hidden markup
-// the client copies from when the "?" is clicked (see #project-descriptions
-// below and js/script.js).
+// Projects with a desc.md each get their own static detail page (see
+// src/pages/[slug].astro) - the "?" mark links there. describedProjectSlugs
+// is just used client-side to decide when to show the "?" (js/script.js).
 const projectEntries = await getCollection('projects');
-const renderedProjects = await Promise.all(projectEntries.map(async (entry) => {
-    const slug = entry.id.split('/')[0];
-    const {Content} = await entry.render();
-    return {slug, data: entry.data, Content};
-}));
+const describedProjectSlugs = projectEntries.map((entry) => entry.id.split('/')[0]);
 
 // Sound files paths (served from public folder)
 const soundPaths = [
@@ -89,13 +85,14 @@ const rand = Math.floor(Math.random() * 6);
         <link rel="shortcut icon" href={`${import.meta.env.BASE_URL}images/favicon_${rand}.png`} type="image/x-icon"/>
         <title>David Wahrenburg</title>
 
-        <script define:vars={{curtainImages, soundPaths, describedProjects: renderedProjects.map(p => p.slug)}}>
+        <script define:vars={{curtainImages, soundPaths, describedProjects: describedProjectSlugs, baseUrl: import.meta.env.BASE_URL}}>
             // Curtain images (fixed order) + sounds, read by js/script.js.
-            // describedProjects lists which project slugs have a desc.md
-            // (rendered into #project-descriptions below).
+            // describedProjects lists which project slugs have a desc.md and
+            // therefore their own detail page at `${baseUrl}${slug}/`.
             window.curtainImages = curtainImages;
             window.soundPaths = soundPaths;
             window.describedProjects = describedProjects;
+            window.baseUrl = baseUrl;
 
             // Random link colors - each link gets a different color
             const linkColors = [
@@ -189,42 +186,19 @@ const rand = Math.floor(Math.random() * 6);
                     <div class="curtain-column" data-column="left">
                         <img src="" alt=""/>
                         <div class="image-filename"></div>
-                        <div class="project-info" data-side="left">
+                        <a class="project-info" data-side="left" href="#">
                             <span class="project-info-mark">?</span>
-                        </div>
+                        </a>
                     </div>
                     <div class="curtain-column" data-column="right">
                         <img src="" alt=""/>
                         <div class="image-filename"></div>
-                        <div class="project-info" data-side="right">
+                        <a class="project-info" data-side="right" href="#">
                             <span class="project-info-mark">?</span>
-                        </div>
+                        </a>
                     </div>
                     </>
             )}
-        </div>
-
-        <div id="project-detail">
-            <div id="project-detail-info" class="info-box">
-                <button id="project-detail-back" class="detail-back-btn" type="button" aria-label="Back">↩</button>
-                <div id="project-detail-content"></div>
-            </div>
-            <div id="project-detail-gallery-wrapper">
-                <div id="project-detail-gallery">
-                    <div id="project-detail-first-image"></div>
-                    <div id="project-detail-image-flow"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="project-descriptions" hidden>
-            {renderedProjects.map(({slug, data, Content}) => (
-                    <div data-project-slug={slug}>
-                        ({data.year})<br/><br/><p class="project-meta">{data.title}<br/><br/>{data.collaborators.length > 0 && ` In coorperation with ${data.collaborators.join(', ')}\n`}<br/>
-                        </p>
-                        <Content/>
-                    </div>
-            ))}
         </div>
 
         <script is:inline src={`${import.meta.env.BASE_URL}js/script.js`}></script>

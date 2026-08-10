@@ -40,66 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const images = window.curtainImages || [];
-  const openProjectDetail = initProjectDetail(images);
-  initCurtain(images, openProjectDetail);
+  initCurtain(images);
 });
-
-// The project detail view replaces the curtain with a single project's own
-// images (full height, horizontally scrollable) plus its desc.md content in
-// a left-aligned info box. Returns a function to open it for a given project
-// slug; the curtain and main text container are hidden while it's open.
-function initProjectDetail(images) {
-  const detail = document.getElementById('project-detail');
-  const infoContent = document.getElementById('project-detail-content');
-  const backBtns = document.querySelectorAll('#project-detail .detail-back-btn');
-  const gallery = document.getElementById('project-detail-gallery');
-  const firstImageContainer = document.getElementById('project-detail-first-image');
-  const imageFlow = document.getElementById('project-detail-image-flow');
-  const textContainer = document.getElementById('text-container');
-  const imageContainer = document.getElementById('image-container');
-
-  if (!detail || !infoContent || !backBtns.length || !gallery || !firstImageContainer || !imageFlow) return () => {};
-
-  const close = () => {
-    detail.classList.remove('open');
-    if (textContainer) textContainer.style.display = '';
-    if (imageContainer) imageContainer.style.display = '';
-  };
-
-  const open = (slug) => {
-    const template = document.querySelector(`#project-descriptions [data-project-slug="${slug}"]`);
-    infoContent.innerHTML = template ? template.innerHTML : '';
-
-    // First image stands alone at the top; the rest flow into a
-    // masonry-like multi-column layout (see #project-detail-image-flow).
-    firstImageContainer.innerHTML = '';
-    imageFlow.innerHTML = '';
-    images.filter(image => image.project === slug).forEach((image, index) => {
-      const img = document.createElement('img');
-      img.src = image.src;
-      img.alt = image.filename;
-      (index === 0 ? firstImageContainer : imageFlow).appendChild(img);
-    });
-    gallery.scrollTop = 0;
-    infoContent.scrollTop = 0;
-
-    if (textContainer) textContainer.style.display = 'none';
-    if (imageContainer) imageContainer.style.display = 'none';
-    detail.classList.add('open');
-  };
-
-  backBtns.forEach(btn => btn.addEventListener('click', close));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && detail.classList.contains('open')) close();
-  });
-
-  return open;
-}
 
 // Curtain images cycle in a fixed order (window.curtainImages, set by
 // index.astro). Only each column's starting position is random; clicking the
 // left half of an image steps backward, the right half steps forward.
-function initCurtain(images, openProjectDetail) {
+function initCurtain(images) {
   const columns = Array.from(document.querySelectorAll('.curtain-column'));
   const total = images.length;
   const describedProjects = new Set(window.describedProjects || []);
@@ -129,12 +76,13 @@ function initCurtain(images, openProjectDetail) {
     }
     if (filenameEl) filenameEl.textContent = filename;
 
-    // The "?" only appears when the current project has a desc.md;
-    // switching images always collapses it back to the closed "?" state.
+    // The "?" only appears when the current project has a desc.md, in
+    // which case it links to that project's own detail page.
     const infoBox = column.querySelector('.project-info');
     if (infoBox) {
-      infoBox.classList.remove('open');
-      infoBox.classList.toggle('visible', describedProjects.has(project));
+      const described = describedProjects.has(project);
+      infoBox.classList.toggle('visible', described);
+      infoBox.href = described ? `${window.baseUrl}${project}/` : '#';
     }
 
     // Keep the immediate neighbors ready so the next click is instant
@@ -174,16 +122,11 @@ function initCurtain(images, openProjectDetail) {
       column.classList.remove('cursor-prev', 'cursor-next');
     });
 
-    // Clicking the "?" opens the project detail view instead of navigating
-    // the image
+    // Clicking the "?" should navigate to its project's detail page
+    // instead of also stepping the curtain image underneath it.
     const infoBox = column.querySelector('.project-info');
     if (infoBox) {
-      infoBox.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const project = images[Number(column.dataset.index)].project;
-        if (!describedProjects.has(project)) return;
-        openProjectDetail(project);
-      });
+      infoBox.addEventListener('click', (e) => e.stopPropagation());
     }
   });
 
