@@ -179,6 +179,11 @@ hr {
     display: block;
 }
 
+/* TODO: detail pages are still WIP - remove this to bring the "?" marks back */
+.project-info.visible {
+    display: none;
+}
+
 .project-info-mark {
     font-weight: bold;
 }
