@@ -3,7 +3,20 @@
     "allow": [
       "Bash(git commit -m \"$(cat <<''EOF''\nRedesign right side as continuous scrollable project container\n\n- Display all projects continuously in right container instead of toggle view\n- Add scroll synchronization between left/right sides\n- Highlight active project in left sidebar based on scroll position\n- Click project on left to smoothly scroll to it on right\n- Remove close button and toggle functionality (no longer needed)\n- Projects now show title, meta info, and full markdown content\n- Each project section takes minimum full viewport height\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(npm run build:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(node -e \"console.log\\(require\\('astro/package.json'\\).version\\)\")",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:4322/PF_25/ -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s http://localhost:4322/ -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(grep -E '^\\(marked|unified|remark-parse|rehype-stringify|remark-gfm\\)$')",
+      "Bash(grep -o '\"description\":\"[^}]\\\\{0,200\\\\}' dist/index.html)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:4322/)",
+      "Bash(grep -o '<p class=\"project-meta\">.\\\\{0,150\\\\}' dist/index.html)",
+      "Bash(grep -o 'describedProjects[^;]\\\\{0,300\\\\}' dist/index.html)",
+      "Bash(grep -v \"^ M public/css/style.css$\\\\|^ M public/js/script.js$\\\\|^ M src/pages/index.astro$\\\\|^ M .claude/settings.local.json$\\\\|^ M CLAUDE.md$\\\\|^ M public/sounds\\\\|^D  public/sounds\\\\|src/content\\\\|src/assets\")",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ],
     "deny": [],
     "ask": []
