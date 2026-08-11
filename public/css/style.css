@@ -207,7 +207,7 @@ hr {
 
 /* toggle to disable detail pages*/
 .project-info.visible {
-    display: block;
+    display: none;
 }
 
 .project-info-mark {
