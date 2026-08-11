@@ -159,25 +159,6 @@ hr {
     display: none;
 }
 
-@media (min-width: 1800px) {
-    .curtain-column {
-        width: 33.334vw;
-    }
-
-    .curtain-column[data-column="middle"] {
-        display: block;
-    }
-
-    #project-detail-info {
-        width: 33.334vw;
-        max-width: 33.334vw;
-    }
-
-    #project-detail-gallery-wrapper {
-        width: 66.667vw;
-    }
-}
-
 /* Landscape images are rotated upright so every curtain slot stays
    portrait-framed. Width/height are swapped pre-rotation (to the column's
    height/width) then rotated back into the column's footprint. */
@@ -293,6 +274,25 @@ hr {
     #project-detail-image-flow {
         column-count: 2;
         gap: 0;
+    }
+}
+
+@media (min-width: 1800px) {
+    .curtain-column {
+        width: 33.334vw;
+    }
+
+    .curtain-column[data-column="middle"] {
+        display: block;
+    }
+
+    #project-detail-info {
+        width: 33.334vw;
+        max-width: 33.334vw;
+    }
+
+    #project-detail-gallery-wrapper {
+        width: 66.667vw;
     }
 }
 
