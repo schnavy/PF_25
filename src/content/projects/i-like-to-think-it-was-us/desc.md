@@ -1,7 +1,8 @@
 ---
 title: "I like to think it was us"
 year: 2026
-medium: "Video, 6'18''"
+medium: "1920x1080 Video, stereo sound, 6'18\""
+showDetails: false
 ---
 
 The story of a rebelious JPEG finding it‘s way through the materiality of infrastructure towards the AWS datacenter

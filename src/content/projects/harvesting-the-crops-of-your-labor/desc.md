@@ -1,7 +1,9 @@
 ---
-title: "[Harvesting] The Crops of your Labor"
+title: "The Crops of your Labor"
 year: 2025
 medium: "6 channel LED Screens, computing hardware, monitoring screen, speaker, 2,5’’ hard drive and ongoing computational process"
+showDetails: true
+url: "[Installation Video](https://youtu.be/gRRNOUOSF78)"
 ---
 
 Like a relentless harvesting machine in high season, reaping the fields lane by lane, the computational process at the

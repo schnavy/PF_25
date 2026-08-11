@@ -2,6 +2,7 @@
 title: "Observing Situation"
 year: 2025
 medium: "Two channel video, 10\" LCD Screens, Raspberry Pi"
+showDetails: true
 ---
 
 Have a look at this thing. From all sides – what is it doing? A scientific instrument as a strange, out of place, disconnected creature in an environment, nevertheless trying to categorize the world in a comically insufficient schema.
