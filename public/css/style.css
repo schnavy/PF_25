@@ -30,7 +30,7 @@
 }
 
 html {
-    font-size: 100%;
+    font-size: 110%;
     scrollbar-width: none;
     letter-spacing: -0.01rem;
 }
@@ -308,7 +308,8 @@ hr {
 #project-detail-back {
     margin-bottom: 0.5rem;
     text-decoration: none;
-    &:hover{
+
+    &:hover {
         text-decoration: underline;
     }
 }
@@ -379,7 +380,7 @@ hr {
 
 @media (max-width: 1000px) {
     html {
-        font-size: 96%;
+        font-size: 100%;
     }
 
     /* No curtain on mobile - projects are only reachable via the list in
