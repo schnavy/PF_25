@@ -117,6 +117,7 @@ const rand = Math.floor(Math.random() * 6);
                 // Shared per-load colors, reused by the project-info "?" marks
                 const topBorderColor = randomColor();
                 const dashedBorderColor = randomColor();
+                const middleMarkColor = randomColor();
 
                 const textContainer = document.getElementById('text-container');
                 textContainer.style.borderColor = topBorderColor;
@@ -131,8 +132,10 @@ const rand = Math.floor(Math.random() * 6);
                 });
                 const leftMark = document.querySelector('[data-side="left"] .project-info-mark');
                 const rightMark = document.querySelector('[data-side="right"] .project-info-mark');
+                const middleMark = document.querySelector('[data-side="middle"] .project-info-mark');
                 if (leftMark) leftMark.style.color = topBorderColor;
                 if (rightMark) rightMark.style.color = dashedBorderColor;
+                if (middleMark) middleMark.style.color = middleMarkColor;
             }
 
             document.addEventListener('DOMContentLoaded', changeColors);
@@ -187,6 +190,13 @@ const rand = Math.floor(Math.random() * 6);
                         <img src="" alt=""/>
                         <div class="image-filename"></div>
                         <a class="project-info" data-side="left" href="#">
+                            <span class="project-info-mark">?</span>
+                        </a>
+                    </div>
+                    <div class="curtain-column" data-column="middle">
+                        <img src="" alt=""/>
+                        <div class="image-filename"></div>
+                        <a class="project-info" data-side="middle" href="#">
                             <span class="project-info-mark">?</span>
                         </a>
                     </div>

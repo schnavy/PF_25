@@ -16,7 +16,8 @@
       "Bash(grep -o 'describedProjects[^;]\\\\{0,300\\\\}' dist/index.html)",
       "Bash(grep -v \"^ M public/css/style.css$\\\\|^ M public/js/script.js$\\\\|^ M src/pages/index.astro$\\\\|^ M .claude/settings.local.json$\\\\|^ M CLAUDE.md$\\\\|^ M public/sounds\\\\|^D  public/sounds\\\\|src/content\\\\|src/assets\")",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(pkill -f \"astro preview\")"
     ],
     "deny": [],
     "ask": []

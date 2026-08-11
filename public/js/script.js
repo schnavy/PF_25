@@ -90,13 +90,21 @@ function initCurtain(images) {
     preload(index - 1);
   };
 
-  // Randomize each column's starting position; the cycling order itself is fixed
-  const leftStart = Math.floor(Math.random() * total);
-  const rightOffset = total > 1 ? 1 + Math.floor(Math.random() * (total - 1)) : 0;
-  const startIndex = {
-    left: leftStart,
-    right: (leftStart + rightOffset) % total
-  };
+  // Randomize each column's starting position (kept distinct from one
+  // another when there are enough images to do so); the cycling order
+  // itself is fixed. Works for any number of columns (there may be a third,
+  // "middle" one on very wide screens - see .curtain-column[data-column] in
+  // style.css).
+  const usedStartIndices = new Set();
+  const startIndex = {};
+  columns.forEach(column => {
+    let index = Math.floor(Math.random() * total);
+    while (usedStartIndices.size < total && usedStartIndices.has(index)) {
+      index = Math.floor(Math.random() * total);
+    }
+    usedStartIndices.add(index);
+    startIndex[column.dataset.column] = index;
+  });
 
   const isLeftHalf = (column, clientX) => {
     const rect = column.getBoundingClientRect();
