@@ -1,6 +1,7 @@
 ---
 title: "We go around in circles in the ship and are consumed by water"
 year: 2026
+medium: "6-channel video installation, projection screens of varying sizes, server rack, sandbags"
 collaborators: ["Seulwoo Choi", "Stella Iakovleva", "Jisu Kim", "Yewon Mun", "Shu-Cheng Tsao"]
 ---
 

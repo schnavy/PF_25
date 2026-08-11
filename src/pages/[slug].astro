@@ -61,60 +61,73 @@ const rand = Math.floor(Math.random() * 6);
         <script define:vars={{baseUrl: import.meta.env.BASE_URL}}>
             window.baseUrl = baseUrl;
 
-            // Random link colors, matching the home page - the back arrow is
-            // excluded so it always stays legible against the images.
-            const linkColors = [
-                '#d20000', // red
-                '#00b475', // turquoise
-                '#0066ff', // blue
-                '#f64900', // light salmon
-                '#b99a00', // yellow
-                '#8816b4', // purple
-                '#cc7b00', // peach
-                '#903caf'  // lavender
-            ];
+                // Random link colors, matching the home page - the back arrow is
+                // excluded so it always stays legible against the images.
+                const linkColors = [
+                    '#d20000', // red
+                    '#00b475', // turquoise
+                    '#0066ff', // blue
+                    '#f64900', // light salmon
+                    '#b99a00', // yellow
+                    '#8816b4', // purple
+                    '#cc7b00', // peach
+                    '#903caf'  // lavender
+                    ];
 
-            const randomColor = () => linkColors[Math.floor(Math.random() * linkColors.length)];
+                const randomColor = () => linkColors[Math.floor(Math.random() * linkColors.length)];
 
-            function changeColors() {
-                document.querySelectorAll('a:not(.detail-back-btn)').forEach(link => {
-                    link.style.color = randomColor();
-                });
+                function changeColors() {
+                    document.querySelectorAll('a:not(.detail-back-btn)').forEach(link => {
+                        link.style.color = randomColor();
+                        });
 
-                const infoBox = document.getElementById('project-detail-info');
-                if (infoBox) infoBox.style.borderColor = randomColor();
+                    const infoBox = document.getElementById('project-detail-info');
+                    if (infoBox) infoBox.style.borderColor = randomColor();
 
-                document.querySelectorAll('hr').forEach(hr => {
-                    hr.style.borderColor = randomColor();
-                });
-            }
-            document.addEventListener('DOMContentLoaded', changeColors);
+                    document.querySelectorAll('hr').forEach(hr => {
+                        hr.style.borderColor = randomColor();
+                        });
+                    }
+                document.addEventListener('DOMContentLoaded', changeColors);
 
-            // Matomo Analytics
-            var _paq = window._paq = window._paq || [];
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-                var u = "//webstat.davidwahrenburg.de/";
-                _paq.push(['setTrackerUrl', u + 'matomo.php']);
-                _paq.push(['setSiteId', '1']);
-                var d = document,
-                    g = d.createElement('script'),
-                    s = d.getElementsByTagName('script')[0];
-                g.async = true;
-                g.src = u + 'matomo.js';
-                s.parentNode.insertBefore(g, s);
-            })();
+                // Matomo Analytics
+                var _paq = window._paq = window._paq || [];
+                _paq.push(['trackPageView']);
+                _paq.push(['enableLinkTracking']);
+                (function () {
+                    var u = "//webstat.davidwahrenburg.de/";
+                    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                    _paq.push(['setSiteId', '1']);
+                    var d = document,
+                        g = d.createElement('script'),
+                        s = d.getElementsByTagName('script')[0];
+                    g.async = true;
+                    g.src = u + 'matomo.js';
+                    s.parentNode.insertBefore(g, s);
+                    })();
         </script>
     </head>
 
     <body>
         <div id="project-detail" class="open">
             <div id="project-detail-info" class="info-box">
-                <a id="project-detail-back" class="detail-back-btn" href={import.meta.env.BASE_URL} aria-label="Back">↩</a>
+                <a id="project-detail-back" class="detail-back-btn" href={import.meta.env.BASE_URL}
+                   aria-label="Back">↩ back</a><br/>
                 <div id="project-detail-content">
-                    ({entry.data.year})<br/><br/><p class="project-meta">{entry.data.title}<br/><br/>{entry.data.collaborators.length > 0 && ` In coorperation with ${entry.data.collaborators.join(', ')}\n`}<br/>
-                    </p>
+                    <div class="project-meta">
+                        <h1>{entry.data.title}</h1>
+                        <div class="level-1">Year: {entry.data.year}</div>
+                        <div class="level-1">{entry.data.medium}</div>
+                        {entry.data.collaborators.length > 0 &&
+                                <div class="level-1">In coorperation with:</div>
+                                <div class="level-2">
+                                    {entry.data.collaborators.join(', ')}
+                                </div>
+                        }
+                        <br/>
+                    </div>
+                    <hr>
+                    <br/>
                     <Content/>
                 </div>
             </div>

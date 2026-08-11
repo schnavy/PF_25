@@ -5,6 +5,7 @@ const projectsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     year: z.number(),
+    medium: z.string().optional(),
     collaborators: z.array(z.string()).default([]),
   }),
 });

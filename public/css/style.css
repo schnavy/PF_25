@@ -46,9 +46,30 @@ body {
     color: var(--text-color);
 }
 
+h1, h2, h3, h4, h5 {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 a {
     color: var(--link-color);
-    text-decoration: none;
+    /*text-decoration: none;*/
+}
+
+ul {
+    padding-left: 1rem;
+
+    li {
+        padding: .2rem;
+
+        &::marker {
+            content: " ";
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
 }
 
 @media (min-width: 1000px) {
@@ -64,27 +85,27 @@ p {
 }
 
 hr {
-    margin: 0.2rem -0.6rem 0 -0.6rem;
+    margin: 0.2rem -0rem 0 -0rem;
     border-width: 2px;
     border-style: dashed;
     border-bottom: none;
     border-color: #bebebe;
 }
 
+/* Shared look for the site's two text panels (#text-container on the home
+   page, #project-detail-info on a project's detail page) - each of those
+   IDs sets its own position/sizing since they differ slightly. */
 .info-box {
-    position: fixed;
-    top: 1rem;
-    left: auto;
-    right: auto;
-    width: 22rem;
-    max-width: calc(100vw - 2rem);
-    padding: 0.6rem;
-    overflow: scroll;
+    padding: 0.7rem 2rem 0.7rem 0.7rem;
+    overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    z-index: 100;
     background-color: white;
     border-top: 2px solid black;
+
+    p {
+        /*max-width: 30rem;*/
+    }
 }
 
 .info-box::-webkit-scrollbar {
@@ -94,6 +115,14 @@ hr {
 /* Content sections */
 .level-0 {
     margin-left: 0;
+}
+
+.level-1 {
+    margin-left: 1rem;
+}
+
+.level-2 {
+    margin-left: 2rem;
 }
 
 .intro-content p {
@@ -113,24 +142,39 @@ hr {
     display: block;
 }
 
+.projects-list {
+    a {
+        color: black !important;
+    }
+}
+
+/* Base layout: #text-container is the left half of the screen, permanently
+   (see body's fixed/full-viewport siblings below); #image-container is the
+   right half and holds one curtain column by default, two on very wide
+   screens (see the min-width: 1800px query). Both use the same fixed,
+   edge-anchored technique so neither needs a wrapping flex parent. */
+#text-container {
+    position: fixed;
+    inset: 0;
+    right: auto;
+    width: 50vw;
+    height: 100vh;
+    z-index: 100;
+}
+
 #image-container {
     position: fixed;
     inset: 0;
-    width: 100vw;
+    left: auto;
+    width: 50vw;
     height: 100vh;
     display: flex;
     overflow: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     background-color: var(--image-background-color);
 }
 
-#image-container::-webkit-scrollbar {
-    display: none;
-}
-
 .curtain-column {
-    width: 50vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     position: relative;
@@ -152,29 +196,30 @@ hr {
     display: block;
 }
 
-/* Third column only appears on very wide screens (see the min-width: 1800px
-   query below); hidden by default so it doesn't affect the normal 50/50
-   split. */
-.curtain-column[data-column="middle"] {
+/* The second image box only appears on very wide screens (see the
+   min-width: 1800px query below). */
+.curtain-column[data-column="right"] {
     display: none;
 }
 
 @media (min-width: 1800px) {
-    .curtain-column {
-        width: 33.334vw;
-    }
-
-    .curtain-column[data-column="middle"] {
-        display: block;
-    }
-
+    #text-container,
     #project-detail-info {
         width: 33.334vw;
         max-width: 33.334vw;
     }
 
+    #image-container,
     #project-detail-gallery-wrapper {
         width: 66.667vw;
+    }
+
+    .curtain-column {
+        width: 50%;
+    }
+
+    .curtain-column[data-column="right"] {
+        display: block;
     }
 }
 
@@ -226,21 +271,25 @@ hr {
     display: flex;
 }
 
-/* Overrides .info-box's fixed/floating positioning - the detail view keeps
-   the same 50/50 column split as the curtain, with the text as the left
-   column instead of a floating box. */
+/* The detail view's own 50/50 column split, matching #text-container /
+   #image-container on the home page - .info-box provides the shared look
+   (background, border-top, padding, scrolling, paragraph width cap). */
 #project-detail-info {
     position: static;
     width: 50vw;
     max-width: 50vw;
     height: 100vh;
-    overflow-y: auto;
-    z-index: auto;
     flex: none;
-    border: none;
+}
 
-    p {
-        max-width: 30rem;
+.project-meta {
+    h1 {
+        margin-bottom: 1rem;
+    }
+
+    div {
+        margin-bottom: .4rem;
+        text-wrap: pretty;
     }
 }
 
@@ -249,7 +298,7 @@ hr {
     background: none;
     border: none;
     font: inherit;
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1;
     padding: 0;
     cursor: pointer;
@@ -258,6 +307,10 @@ hr {
 
 #project-detail-back {
     margin-bottom: 0.5rem;
+    text-decoration: none;
+    &:hover{
+        text-decoration: underline;
+    }
 }
 
 #project-detail-gallery-wrapper {
@@ -324,79 +377,23 @@ hr {
     overflow: hidden;
 }
 
-.mobile-only {
-    display: none;
-}
-
 @media (max-width: 1000px) {
     html {
         font-size: 96%;
     }
 
-    .mobile-only {
-        display: block;
-    }
-
-    /* Info boxes - centered (text container is also toggleable, see below) */
-    .info-box {
-        top: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        right: auto;
-    }
-
-    #text-container-content {
-        display: block;
-    }
-
-    /* Closed state */
-    #text-container.mobile-closed {
-        cursor: pointer;
-    }
-
-    #text-container.mobile-closed #text-container-content {
-        display: none;
-    }
-
-    #text-container.mobile-closed::before {
-        content: "Info ↓";
-    }
-
-    /* Open state - show close button */
-    #text-container::after {
-        content: "↑";
-        position: absolute;
-        bottom: 0.6rem;
-        right: 0.6rem;
-        cursor: pointer;
-    }
-
-    #text-container.mobile-closed::after {
-        content: "";
-    }
-
-    /* Hide grid overlay */
-    #grid {
-        display: none;
-    }
-
-    /* Single column image layout */
-    #image-container {
-        display: block;
-    }
-
-    .curtain-column[data-column="left"] {
+    /* No curtain on mobile - projects are only reachable via the list in
+       #text-container, which takes the full screen. */
+    #text-container {
         width: 100vw;
-        height: 100vh;
     }
 
-    .curtain-column[data-column="middle"],
-    .curtain-column[data-column="right"] {
+    #image-container {
         display: none;
     }
 
-    .curtain-column img.rotated {
-        height: 100vw;
+    #grid {
+        display: block;
     }
 
     /* Stack the detail view's text/gallery in one scroll context (text
@@ -414,7 +411,6 @@ hr {
         height: auto;
         overflow-y: visible;
         flex: none;
-        transform: translateX(0);
     }
 
     #project-detail-gallery-wrapper {

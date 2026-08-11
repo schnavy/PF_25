@@ -6,6 +6,9 @@ import {getImage} from 'astro:assets';
 const intro = await getCollection('sections').then(entries =>
     entries.find(entry => entry.id === 'intro.md')
 );
+const contact = await getCollection('sections').then(entries =>
+    entries.find(entry => entry.id === 'contact.md')
+);
 const timeline = await getCollection('sections').then(entries =>
     entries.find(entry => entry.id === 'timeline.md')
 );
@@ -51,10 +54,14 @@ const curtainImages = (await Promise.all(
 )).flat();
 
 // Projects with a desc.md each get their own static detail page (see
-// src/pages/[slug].astro) - the "?" mark links there. describedProjectSlugs
-// is just used client-side to decide when to show the "?" (js/script.js).
+// src/pages/[slug].astro) - both the "?" mark and the project list in the
+// info box link there. describedProjectSlugs is used client-side to decide
+// when to show the "?" (js/script.js).
 const projectEntries = await getCollection('projects');
-const describedProjectSlugs = projectEntries.map((entry) => entry.id.split('/')[0]);
+const describedProjects = projectEntries
+    .map((entry) => ({slug: entry.id.split('/')[0], title: entry.data.title, year: entry.data.year}))
+    .sort((a, b) => a.title.localeCompare(b.title));
+const describedProjectSlugs = describedProjects.map((p) => p.slug);
 
 // Sound files paths (served from public folder)
 const soundPaths = [
@@ -67,6 +74,9 @@ const soundPaths = [
 
 // Render markdown content
 const {Content: IntroContent} = intro ? await intro.render() : {Content: null};
+const {Content: ContactContent} = contact ? await contact.render() : {Content: null};
+const {Content: TimelineContent} = timeline ? await timeline.render() : {Content: null};
+
 
 // Generate random favicon number
 const rand = Math.floor(Math.random() * 6);
@@ -85,7 +95,12 @@ const rand = Math.floor(Math.random() * 6);
         <link rel="shortcut icon" href={`${import.meta.env.BASE_URL}images/favicon_${rand}.png`} type="image/x-icon"/>
         <title>David Wahrenburg</title>
 
-        <script define:vars={{curtainImages, soundPaths, describedProjects: describedProjectSlugs, baseUrl: import.meta.env.BASE_URL}}>
+        <script define:vars={{
+            curtainImages,
+            soundPaths,
+            describedProjects: describedProjectSlugs,
+            baseUrl: import.meta.env.BASE_URL
+        }}>
             // Curtain images (fixed order) + sounds, read by js/script.js.
             // describedProjects lists which project slugs have a desc.md and
             // therefore their own detail page at `${baseUrl}${slug}/`.
@@ -117,7 +132,6 @@ const rand = Math.floor(Math.random() * 6);
                 // Shared per-load colors, reused by the project-info "?" marks
                 const topBorderColor = randomColor();
                 const dashedBorderColor = randomColor();
-                const middleMarkColor = randomColor();
 
                 const textContainer = document.getElementById('text-container');
                 textContainer.style.borderColor = topBorderColor;
@@ -132,10 +146,8 @@ const rand = Math.floor(Math.random() * 6);
                 });
                 const leftMark = document.querySelector('[data-side="left"] .project-info-mark');
                 const rightMark = document.querySelector('[data-side="right"] .project-info-mark');
-                const middleMark = document.querySelector('[data-side="middle"] .project-info-mark');
                 if (leftMark) leftMark.style.color = topBorderColor;
                 if (rightMark) rightMark.style.color = dashedBorderColor;
-                if (middleMark) middleMark.style.color = middleMarkColor;
             }
 
             document.addEventListener('DOMContentLoaded', changeColors);
@@ -161,9 +173,34 @@ const rand = Math.floor(Math.random() * 6);
     <body>
         <div id="text-container" class="info-box">
             <div id="text-container-content">
-                <div class="intro-content">
+                <h1>David Wahrenburg</h1>
+                <div class="intro-content level-1">
                     {IntroContent &&
                             <IntroContent/>}
+                </div>
+                <br/>
+                <br/>
+                <div class="projects-list">
+                    <p class="level-0">Selected Projects:</p>
+                    <ul>
+                        {describedProjects.map(({slug, title, year}) => (
+                                <li>
+                                    <a href={`${import.meta.env.BASE_URL}${slug}/`}>{title}, {year}</a>
+                                </li>
+                        ))}
+                    </ul>
+                </div>
+                <br/>
+                <hr>
+                <br/>
+                <div class="timeline-content level-0">
+                    {TimelineContent &&
+                            <TimelineContent/>}
+                </div>
+                <br/>
+                <div class="contact-content">
+                    {ContactContent &&
+                            <ContactContent/>}
                 </div>
                 <br/>
                 <span id="impressum-btn">Imprint</span>
@@ -190,13 +227,6 @@ const rand = Math.floor(Math.random() * 6);
                         <img src="" alt=""/>
                         <div class="image-filename"></div>
                         <a class="project-info" data-side="left" href="#">
-                            <span class="project-info-mark">?</span>
-                        </a>
-                    </div>
-                    <div class="curtain-column" data-column="middle">
-                        <img src="" alt=""/>
-                        <div class="image-filename"></div>
-                        <a class="project-info" data-side="middle" href="#">
                             <span class="project-info-mark">?</span>
                         </a>
                     </div>
