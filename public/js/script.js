@@ -27,12 +27,19 @@ function initCurtain(images) {
 
   if (total === 0 || columns.length === 0) return;
 
-  const preloaded = new Set();
+  // A plain `new Image().src = ...` only fetches the bytes - the browser can
+  // still decode it lazily once assigned to the visible <img>, which causes
+  // a brief flash of the outgoing image on click. decode() forces that work
+  // to happen ahead of time, off-screen.
+  const preloaded = new Map();
   const preload = (index) => {
     index = ((index % total) + total) % total;
-    if (preloaded.has(index)) return;
-    preloaded.add(index);
-    new Image().src = images[index].src;
+    if (preloaded.has(index)) return preloaded.get(index);
+    const img = new Image();
+    img.src = images[index].src;
+    const ready = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+    preloaded.set(index, ready);
+    return ready;
   };
 
   const showImage = (column, index) => {
@@ -40,14 +47,7 @@ function initCurtain(images) {
     column.dataset.index = String(index);
 
     const {src, filename, project, landscape} = images[index];
-    const imgEl = column.querySelector('img');
     const filenameEl = column.querySelector('.image-filename');
-    if (imgEl) {
-      imgEl.src = src;
-      // Landscape images are rotated upright so every curtain slot stays
-      // portrait-framed (see .curtain-column img.rotated in style.css).
-      imgEl.classList.toggle('rotated', !!landscape);
-    }
     if (filenameEl) filenameEl.textContent = filename;
 
     // The "?" only appears when the current project has a desc.md, in
@@ -58,6 +58,20 @@ function initCurtain(images) {
       infoBox.classList.toggle('visible', described);
       infoBox.href = described ? `${window.baseUrl}${project}/` : '#';
     }
+
+    // Only swap the visible image once it's fully decoded, and only if no
+    // later click on this column has superseded this one in the meantime.
+    const token = (column._imageToken = {});
+    preload(index).then(() => {
+      if (column._imageToken !== token) return;
+      const imgEl = column.querySelector('img');
+      if (imgEl) {
+        imgEl.src = src;
+        // Landscape images are rotated upright so every curtain slot stays
+        // portrait-framed (see .curtain-column img.rotated in style.css).
+        imgEl.classList.toggle('rotated', !!landscape);
+      }
+    });
 
     // Keep the immediate neighbors ready so the next click is instant
     preload(index + 1);

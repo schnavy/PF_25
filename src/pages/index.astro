@@ -29,13 +29,28 @@ const curtainImageGlob = import.meta.glob('/src/content/projects/*/*.{jpg,jpeg,p
 const projectSlugOf = (path) => path.split('/').at(-2);
 const projectSlugs = [...new Set(Object.keys(curtainImageGlob).map(projectSlugOf))].sort();
 
+const shuffled = (array: any[]) => {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+};
+
 // Downscale + convert to webp at build time so the client never has to
 // download full-resolution originals just to fill a curtain column.
-const curtainImages = (await Promise.all(
+const curtainImages = shuffled((await Promise.all(
     projectSlugs.map((slug) => {
+        // Only the first two images (by filename) of each project make it
+        // into the home page's curtain - keeps image optimization cheap and
+        // every load fast. The rest are still shown on the project's own
+        // detail page. Selection is fixed; only the overall order (below)
+        // is randomized.
         const projectImageEntries = Object.entries(curtainImageGlob)
             .filter(([path]) => projectSlugOf(path) === slug)
-            .sort(([a], [b]) => a.localeCompare(b));
+            .sort(([a], [b]) => a.localeCompare(b))
+            .slice(0, 2);
 
         return Promise.all(projectImageEntries.map(async ([path, image]) => {
             const optimized = await getImage({
@@ -51,16 +66,18 @@ const curtainImages = (await Promise.all(
             return {src: optimized.src, filename, project: slug, landscape};
         }));
     })
-)).flat();
+)).flat());
 
-// Projects with a desc.md each get their own static detail page (see
-// src/pages/[slug].astro) - both the "?" mark and the project list in the
-// info box link there. describedProjectSlugs is used client-side to decide
-// when to show the "?" (js/script.js).
+// Every project with a desc.md gets its own static detail page (see
+// src/pages/[slug].astro), but only those with showDetails: true are
+// listed here and get a "?" mark on the curtain, linking to it.
+// describedProjectSlugs is used client-side to decide when to show the "?"
+// (js/script.js).
 const projectEntries = await getCollection('projects');
 const describedProjects = projectEntries
+    .filter((entry) => entry.data.showDetails)
     .map((entry) => ({slug: entry.id.split('/')[0], title: entry.data.title, year: entry.data.year}))
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .sort((a, b) => b.year - a.year);
 const describedProjectSlugs = describedProjects.map((p) => p.slug);
 
 // Sound files paths (served from public folder)
@@ -180,7 +197,6 @@ const rand = Math.floor(Math.random() * 6);
                             <IntroContent/>}
                 </div>
                 <br/>
-                <br/>
                 <div class="projects-list">
                     <p class="level-0">Selected Projects:</p>
                     <ul>
@@ -194,15 +210,16 @@ const rand = Math.floor(Math.random() * 6);
                 <br/>
                 <hr>
                 <br/>
-                <div class="timeline-content level-0">
+  <!--              <div class="timeline-content level-0">
                     {TimelineContent &&
                             <TimelineContent/>}
                 </div>
-                <br/>
+                <br/>-->
                 <div class="contact-content">
                     {ContactContent &&
                             <ContactContent/>}
                 </div>
+                <br/>
                 <br/>
                 <span id="impressum-btn">Imprint</span>
                 <div class="imprint-container">

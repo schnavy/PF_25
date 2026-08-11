@@ -42,6 +42,12 @@ const images = await Promise.all(projectImageEntries.map(async ([path, image]) =
 }));
 const [firstImage, ...restImages] = images;
 
+// url is written as a markdown link, e.g. "[Visit Web Version](https://...)";
+// fall back to using the raw value as both label and href if it isn't.
+const urlMatch = entry.data.url?.match(/^\[(.*)]\((.*)\)$/);
+const linkLabel = urlMatch ? urlMatch[1] : entry.data.url;
+const linkHref = urlMatch ? urlMatch[2] : entry.data.url;
+
 // Generate random favicon number
 const rand = Math.floor(Math.random() * 6);
 ---
@@ -112,15 +118,19 @@ const rand = Math.floor(Math.random() * 6);
         <div id="project-detail" class="open">
             <div id="project-detail-info" class="info-box">
                 <a id="project-detail-back" class="detail-back-btn" href={import.meta.env.BASE_URL}
-                   aria-label="Back">↩ back</a><br/>
+                   aria-label="Back">↩ ‘-‘_@_</a><br/>
                 <div id="project-detail-content">
                     <div class="project-meta">
                         <h1>{entry.data.title}</h1>
                         <div class="level-1">Year: {entry.data.year}</div>
                         <div class="level-1">{entry.data.medium}</div>
+                        {entry.data.url &&
+                                <div class="level-1">
+                                    <a href={linkHref} target="_blank" rel="noopener noreferrer">{linkLabel}</a>
+                                </div>
+                        }
                         {entry.data.collaborators.length > 0 &&
-                                <div class="level-1">In coorperation with:</div>
-                                <div class="level-2">
+                                <div class="level-1">Together with:<br/>
                                     {entry.data.collaborators.join(', ')}
                                 </div>
                         }

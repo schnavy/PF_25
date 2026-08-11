@@ -18,7 +18,7 @@
 :root {
     --background-color: rgb(247, 247, 247);
     --background-color-contrast: white;
-    --text-color: black;
+    --text-color: #000000;
     --link-color: #858585;
     --image-background-color: rgb(222, 222, 222);
 }
@@ -29,10 +29,30 @@
     box-sizing: border-box;
 }
 
+*::selection {
+    background-color: #b99a00;
+    color: #d20000;
+}
+
+*::-moz-selection {
+    background-color: #b99a00;
+    color: #d20000;
+}
+
+.projects-list *::selection {
+    background-color: #8816b4;
+    color: #f64900;
+}
+
+.projects-list *::-moz-selection {
+    background-color: #b99a00;
+    color: #d20000;
+}
+
 html {
-    font-size: 110%;
+    font-size: 130%;
     scrollbar-width: none;
-    letter-spacing: -0.01rem;
+    letter-spacing: -.018rem;
 }
 
 body {
@@ -56,11 +76,20 @@ a {
     /*text-decoration: none;*/
 }
 
+/* External links (rehype-external-links adds target="_blank" to every
+   external link in rendered markdown; [slug].astro's url field does the
+   same manually) get a small north-east arrow. */
+a[target="_blank"]::after {
+    content: " ↗";
+}
+
 ul {
     padding-left: 1rem;
 
     li {
-        padding: .2rem;
+        padding: .15rem;
+        text-indent: -1rem;
+        margin-left: 1rem;
 
         &::marker {
             content: " ";
@@ -78,10 +107,10 @@ ul {
     }
 }
 
-p {
+p, .project-meta > div {
     width: fit-content;
     text-wrap: pretty;
-    white-space: pre-wrap;
+    max-width: 45rem;
 }
 
 hr {
@@ -144,7 +173,7 @@ hr {
 
 .projects-list {
     a {
-        color: black !important;
+        color: var(--text-color) !important;
     }
 }
 
@@ -284,12 +313,14 @@ hr {
 
 .project-meta {
     h1 {
-        margin-bottom: 1rem;
+        margin-bottom: .7rem;
     }
 
     div {
-        margin-bottom: .4rem;
+        margin-bottom: .35rem;
         text-wrap: pretty;
+        padding-left: 1rem;
+        text-indent: -1rem;
     }
 }
 
