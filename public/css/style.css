@@ -50,7 +50,7 @@
 }
 
 html {
-    font-size: 130%;
+    font-size: 120%;
     scrollbar-width: none;
     letter-spacing: -.018rem;
 }
@@ -60,7 +60,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "GTPMT", ui-monospace, monospace;
+    /*font-family: "GTPMT", ui-monospace, monospace;*/
+    font-family: serif;
     line-height: 110%;
     background-color: var(--background-color);
     color: var(--text-color);
@@ -234,13 +235,13 @@ hr {
 @media (min-width: 1800px) {
     #text-container,
     #project-detail-info {
-        width: 33.334vw;
+        width: 33.334vw !important;
         max-width: 33.334vw;
     }
 
     #image-container,
     #project-detail-gallery-wrapper {
-        width: 66.667vw;
+        width: 66.667vw !important;
     }
 
     .curtain-column {
@@ -265,14 +266,14 @@ hr {
 .project-info {
     display: none;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0.3rem 0.5rem;
+    top: 0;
+    right: 10%;
+    padding: 0.7rem .3rem .3rem .3rem;
     background-color: white;
     border-top: 2px solid black;
     cursor: pointer;
     z-index: 20;
+    text-decoration: none;
 }
 
 .project-info.visible {
@@ -282,10 +283,6 @@ hr {
 /* toggle to disable detail pages*/
 .project-info.visible {
     display: block;
-}
-
-.project-info-mark {
-    font-weight: bold;
 }
 
 #project-detail {
@@ -376,6 +373,7 @@ hr {
 
 @media (min-width: 1700px) {
     #project-detail-image-flow {
+        max-width: 1100px;
         column-count: 2;
         gap: 0;
     }
