@@ -19,9 +19,11 @@ vertically, even when anchored to a fixed place.
 Dérive as well as the mode of movement of a ship)
 
 <br/>
+
 ...→ In girum imus nocte ecce et consumimur igni → Fire → Circle → Spiral → Google Maps → Direction → Tide level → Tide → Tide gauge → Amsterdam → North Sea → North Sea flood of 1962 → 1962 → Fluxus → Düsseldorf → Rhine → North Sea → Water → Earth → Human Geography → Cutural Geography → Psychogeography(Psychological) → Dérive (Drift) → Drift → Drift Ice → Navigation → Canal → France → Avant-garde → Letterist International → In girum imus...
+
 <br/>
-<br/>
+
 Navigating along and between these keywords, using hyperlinks in the online encyclopedia “Wikipedia”, a chain of 29
 words emerged. For each word a short video clip was produced by a member of the group, which then bacame a video
 installation inside the main body of the ship. To resemble the connections and to move the bodies of the spectators
