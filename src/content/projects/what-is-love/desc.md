@@ -1,5 +1,5 @@
 ---
-title: "what is #love?"
+title: "What is #love?"
 year: 2021
 showDetails: true
 medium: "Phone, Website, Webscraping Script"

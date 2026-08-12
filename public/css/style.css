@@ -7,6 +7,38 @@
 }
 
 @font-face {
+    font-family: "GTPMT sans-serif";
+    src: url("../fonts/GTPressuraLCGV-Text.woff2") format("woff2");
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Maple";
+    src: url("../fonts/MapleMono-Light.ttf.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Maple";
+    src: url("../fonts/MapleMono-LightItalic.ttf.woff2") format("woff2");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Panchi";
+    src: url("../fonts/Panchi-Mono.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*TODO: remove unused fonts after deciding*/
+@font-face {
     font-family: "GTPMT";
     src: url("../fonts/GT-Pressura-Mono-Text-Italic.woff2") format("woff2"),
     url("../fonts/GT-Pressura-Mono-Text-Italic.woff") format("woff");
@@ -19,8 +51,18 @@
     --background-color: rgb(247, 247, 247);
     --background-color-contrast: white;
     --text-color: #000000;
-    --link-color: #858585;
-    --image-background-color: rgb(222, 222, 222);
+    --link-color: var(--text-color);
+    --image-background-color: rgb(209, 243, 89);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #181818;
+        --background-color-contrast: black;
+        --text-color: #dfecf1;
+        --link-color: rgb(247, 247, 247);
+        --image-background-color: rgb(193, 194, 187);
+    }
 }
 
 * {
@@ -50,9 +92,11 @@
 }
 
 html {
-    font-size: 120%;
+    font-size: 125%;
     scrollbar-width: none;
     letter-spacing: -.018rem;
+    background-color: var(--background-color);
+    overscroll-behavior: none;
 }
 
 body {
@@ -60,9 +104,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /*font-family: "GTPMT", ui-monospace, monospace;*/
-    font-family: serif;
-    line-height: 110%;
+    font-family: "Panchi", ui-monospace, serif;
+    /*font-family: serif;*/
+    line-height: 120%;
     background-color: var(--background-color);
     color: var(--text-color);
 }
@@ -88,7 +132,7 @@ ul {
     padding-left: 1rem;
 
     li {
-        padding: .15rem;
+        padding: .1rem;
         text-indent: -1rem;
         margin-left: 1rem;
 
@@ -119,7 +163,7 @@ hr {
     border-width: 2px;
     border-style: dashed;
     border-bottom: none;
-    border-color: #bebebe;
+    border-color: var(--text-color);
 }
 
 /* Shared look for the site's two text panels (#text-container on the home
@@ -130,7 +174,7 @@ hr {
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    background-color: white;
+    background-color: var(--background-color);
     border-top: 2px solid black;
 
     p {
@@ -269,7 +313,7 @@ hr {
     top: 0;
     right: 10%;
     padding: 0.7rem .3rem .3rem .3rem;
-    background-color: white;
+    background-color: var(--background-color);
     border-top: 2px solid black;
     cursor: pointer;
     z-index: 20;

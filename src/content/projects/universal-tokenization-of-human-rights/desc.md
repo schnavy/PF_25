@@ -1,5 +1,5 @@
 ---
-title: "Universal and Tokenized"
+title: "972 442 269 719 723"
 year: 2025
 showDetails: true
 medium: "13 printed sheets of paper (4 pages output, 9 pages dictionary), website"

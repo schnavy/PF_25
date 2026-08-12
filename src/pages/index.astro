@@ -141,7 +141,7 @@ const rand = Math.floor(Math.random() * 6);
             const randomColor = () => linkColors[Math.floor(Math.random() * linkColors.length)];
 
             function changeColors() {
-                const links = document.querySelectorAll('a');
+                const links = document.querySelectorAll('a[target="_blank"], a[href^="mailto:"]');
                 links.forEach(link => {
                     link.style.color = randomColor();
                 });
@@ -153,18 +153,14 @@ const rand = Math.floor(Math.random() * 6);
                 const textContainer = document.getElementById('text-container');
                 textContainer.style.borderColor = topBorderColor;
 
-                const hrs = document.querySelectorAll('hr');
-                hrs.forEach(hr => {
-                    hr.style.borderColor = dashedBorderColor;
-                });
+                /*         const hrs = document.querySelectorAll('hr');
+                         hrs.forEach(hr => {
+                             hr.style.borderColor = dashedBorderColor;
+                         });*/
 
                 document.querySelectorAll('.project-info').forEach(box => {
                     box.style.borderTopColor = topBorderColor;
                 });
-                const leftMark = document.querySelector('[data-side="left"] .project-info-mark');
-                const rightMark = document.querySelector('[data-side="right"] .project-info-mark');
-                if (leftMark) leftMark.style.color = topBorderColor;
-                if (rightMark) rightMark.style.color = dashedBorderColor;
             }
 
             document.addEventListener('DOMContentLoaded', changeColors);
@@ -226,10 +222,11 @@ const rand = Math.floor(Math.random() * 6);
                 <span id="impressum-btn">Imprint</span>
                 <div class="imprint-container">
                     <br/>
+                    Open Typeface used: <a href="https://erwanleretif.xyz/typotheque#typo-demozone-panchi">Panchi Mono</a><br/><br/>
                     Responsible for shown content, design and development of this website:<br/>
                     David Wahrenburg<br/>
                     Rolandstraße 11<br/>
-                    D-28199 Bremen<br/>
+                    D-28199 Bremen<br/><br/>
                     ©{new Date().getFullYear()} all rights
                     reserved
                     <br/><br/>
