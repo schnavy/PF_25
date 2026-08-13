@@ -1,6 +1,10 @@
 ---
 title: "Observing Situation"
 year: 2025
+medium: "Two channel video, 10\" LCD Screens, Raspberry Pi"
+showDetails: true
+url: "[Watch Video](https://youtu.be/7SHAmL51LSY)"
+
 ---
 
 Have a look at this thing. From all sides – what is it doing? A scientific instrument as a strange, out of place, disconnected creature in an environment, nevertheless trying to categorize the world in a comically insufficient schema.

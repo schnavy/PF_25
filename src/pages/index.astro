@@ -6,6 +6,9 @@ import {getImage} from 'astro:assets';
 const intro = await getCollection('sections').then(entries =>
     entries.find(entry => entry.id === 'intro.md')
 );
+const contact = await getCollection('sections').then(entries =>
+    entries.find(entry => entry.id === 'contact.md')
+);
 const timeline = await getCollection('sections').then(entries =>
     entries.find(entry => entry.id === 'timeline.md')
 );
@@ -26,13 +29,28 @@ const curtainImageGlob = import.meta.glob('/src/content/projects/*/*.{jpg,jpeg,p
 const projectSlugOf = (path) => path.split('/').at(-2);
 const projectSlugs = [...new Set(Object.keys(curtainImageGlob).map(projectSlugOf))].sort();
 
+const shuffled = (array: any[]) => {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+};
+
 // Downscale + convert to webp at build time so the client never has to
 // download full-resolution originals just to fill a curtain column.
-const curtainImages = (await Promise.all(
+const curtainImages = shuffled((await Promise.all(
     projectSlugs.map((slug) => {
+        // Only the first two images (by filename) of each project make it
+        // into the home page's curtain - keeps image optimization cheap and
+        // every load fast. The rest are still shown on the project's own
+        // detail page. Selection is fixed; only the overall order (below)
+        // is randomized.
         const projectImageEntries = Object.entries(curtainImageGlob)
             .filter(([path]) => projectSlugOf(path) === slug)
-            .sort(([a], [b]) => a.localeCompare(b));
+            .sort(([a], [b]) => a.localeCompare(b))
+            .slice(0, 2);
 
         return Promise.all(projectImageEntries.map(async ([path, image]) => {
             const optimized = await getImage({
@@ -48,13 +66,19 @@ const curtainImages = (await Promise.all(
             return {src: optimized.src, filename, project: slug, landscape};
         }));
     })
-)).flat();
+)).flat());
 
-// Projects with a desc.md each get their own static detail page (see
-// src/pages/[slug].astro) - the "?" mark links there. describedProjectSlugs
-// is just used client-side to decide when to show the "?" (js/script.js).
+// Every project with a desc.md gets its own static detail page (see
+// src/pages/[slug].astro), but only those with showDetails: true are
+// listed here and get a "?" mark on the curtain, linking to it.
+// describedProjectSlugs is used client-side to decide when to show the "?"
+// (js/script.js).
 const projectEntries = await getCollection('projects');
-const describedProjectSlugs = projectEntries.map((entry) => entry.id.split('/')[0]);
+const describedProjects = projectEntries
+    .filter((entry) => entry.data.showDetails)
+    .map((entry) => ({slug: entry.id.split('/')[0], title: entry.data.title, year: entry.data.year}))
+    .sort((a, b) => b.year - a.year);
+const describedProjectSlugs = describedProjects.map((p) => p.slug);
 
 // Sound files paths (served from public folder)
 const soundPaths = [
@@ -67,6 +91,9 @@ const soundPaths = [
 
 // Render markdown content
 const {Content: IntroContent} = intro ? await intro.render() : {Content: null};
+const {Content: ContactContent} = contact ? await contact.render() : {Content: null};
+const {Content: TimelineContent} = timeline ? await timeline.render() : {Content: null};
+
 
 // Generate random favicon number
 const rand = Math.floor(Math.random() * 6);
@@ -85,7 +112,12 @@ const rand = Math.floor(Math.random() * 6);
         <link rel="shortcut icon" href={`${import.meta.env.BASE_URL}images/favicon_${rand}.png`} type="image/x-icon"/>
         <title>David Wahrenburg</title>
 
-        <script define:vars={{curtainImages, soundPaths, describedProjects: describedProjectSlugs, baseUrl: import.meta.env.BASE_URL}}>
+        <script define:vars={{
+            curtainImages,
+            soundPaths,
+            describedProjects: describedProjectSlugs,
+            baseUrl: import.meta.env.BASE_URL
+        }}>
             // Curtain images (fixed order) + sounds, read by js/script.js.
             // describedProjects lists which project slugs have a desc.md and
             // therefore their own detail page at `${baseUrl}${slug}/`.
@@ -109,7 +141,7 @@ const rand = Math.floor(Math.random() * 6);
             const randomColor = () => linkColors[Math.floor(Math.random() * linkColors.length)];
 
             function changeColors() {
-                const links = document.querySelectorAll('a');
+                const links = document.querySelectorAll('a[target="_blank"], a[href^="mailto:"]');
                 links.forEach(link => {
                     link.style.color = randomColor();
                 });
@@ -117,25 +149,18 @@ const rand = Math.floor(Math.random() * 6);
                 // Shared per-load colors, reused by the project-info "?" marks
                 const topBorderColor = randomColor();
                 const dashedBorderColor = randomColor();
-                const middleMarkColor = randomColor();
 
                 const textContainer = document.getElementById('text-container');
                 textContainer.style.borderColor = topBorderColor;
 
-                const hrs = document.querySelectorAll('hr');
-                hrs.forEach(hr => {
-                    hr.style.borderColor = dashedBorderColor;
-                });
+                /*         const hrs = document.querySelectorAll('hr');
+                         hrs.forEach(hr => {
+                             hr.style.borderColor = dashedBorderColor;
+                         });*/
 
                 document.querySelectorAll('.project-info').forEach(box => {
                     box.style.borderTopColor = topBorderColor;
                 });
-                const leftMark = document.querySelector('[data-side="left"] .project-info-mark');
-                const rightMark = document.querySelector('[data-side="right"] .project-info-mark');
-                const middleMark = document.querySelector('[data-side="middle"] .project-info-mark');
-                if (leftMark) leftMark.style.color = topBorderColor;
-                if (rightMark) rightMark.style.color = dashedBorderColor;
-                if (middleMark) middleMark.style.color = middleMarkColor;
             }
 
             document.addEventListener('DOMContentLoaded', changeColors);
@@ -161,18 +186,49 @@ const rand = Math.floor(Math.random() * 6);
     <body>
         <div id="text-container" class="info-box">
             <div id="text-container-content">
-                <div class="intro-content">
+                <h1>David Wahrenburg</h1>
+                <div class="intro-content level-1">
+                    @_’-‘<br/>
                     {IntroContent &&
                             <IntroContent/>}
                 </div>
                 <br/>
-                <span id="impressum-btn">Imprint</span>
+                <div class="projects-list">
+                    <p class="level-0">Selected Projects:</p>
+                    <ul>
+                        {describedProjects.map(({slug, title, year}) => (
+                                <li>
+                                    <a href={`${import.meta.env.BASE_URL}${slug}/`}>{title}, {year}</a>
+                                </li>
+                        ))}
+                    </ul>
+                </div>
+                <!--<hr>-->
+                <div class="hhrr">----------------------------------</div>
+                <div class="timeline-content level-0">
+                    {TimelineContent &&
+                            <TimelineContent/>}
+                </div>
+                <div class="hhrr">----------------------------------</div>
+                <div class="contact-content">
+                    {ContactContent &&
+                            <ContactContent/>}
+                </div>
+                ,. _
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                ’-‘"`- ._,-' "`-. _ *
+                <br/>
+                .
+                <br/><span id="impressum-btn">Imprint</span>
                 <div class="imprint-container">
                     <br/>
                     Responsible for shown content, design and development of this website:<br/>
                     David Wahrenburg<br/>
                     Rolandstraße 11<br/>
-                    D-28199 Bremen<br/>
+                    D-28199 Bremen<br/><br/>
                     ©{new Date().getFullYear()} all rights
                     reserved
                     <br/><br/>
@@ -190,14 +246,7 @@ const rand = Math.floor(Math.random() * 6);
                         <img src="" alt=""/>
                         <div class="image-filename"></div>
                         <a class="project-info" data-side="left" href="#">
-                            <span class="project-info-mark">?</span>
-                        </a>
-                    </div>
-                    <div class="curtain-column" data-column="middle">
-                        <img src="" alt=""/>
-                        <div class="image-filename"></div>
-                        <a class="project-info" data-side="middle" href="#">
-                            <span class="project-info-mark">?</span>
+                            <span class="project-info-mark">i</span>
                         </a>
                     </div>
                     <div class="curtain-column" data-column="right">

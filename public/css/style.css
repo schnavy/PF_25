@@ -7,6 +7,38 @@
 }
 
 @font-face {
+    font-family: "GTPMT sans-serif";
+    src: url("../fonts/GTPressuraLCGV-Text.woff2") format("woff2");
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Maple";
+    src: url("../fonts/MapleMono-Light.ttf.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Maple";
+    src: url("../fonts/MapleMono-LightItalic.ttf.woff2") format("woff2");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Panchi";
+    src: url("../fonts/Panchi-Mono.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*TODO: remove unused fonts after deciding*/
+@font-face {
     font-family: "GTPMT";
     src: url("../fonts/GT-Pressura-Mono-Text-Italic.woff2") format("woff2"),
     url("../fonts/GT-Pressura-Mono-Text-Italic.woff") format("woff");
@@ -15,12 +47,41 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Libertine";
+    src: url("../fonts/LinLibertine.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Libertine";
+    src: url("../fonts/LinLibertineI.woff2") format("woff2");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
 :root {
     --background-color: rgb(247, 247, 247);
     --background-color-contrast: white;
-    --text-color: black;
-    --link-color: #858585;
-    --image-background-color: rgb(222, 222, 222);
+    --text-color: #000000;
+    --link-color: var(--text-color);
+    --image-background-color: rgb(209, 243, 89);
+    --spacing: .7rem;
+    --neg-spacing: -0.7rem;
+
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #181818;
+        --background-color-contrast: black;
+        --text-color: #dfecf1;
+        --link-color: rgb(247, 247, 247);
+        --image-background-color: rgb(193, 194, 187);
+    }
 }
 
 * {
@@ -29,10 +90,32 @@
     box-sizing: border-box;
 }
 
+*::selection {
+    background-color: #b99a00;
+    color: #d20000;
+}
+
+*::-moz-selection {
+    background-color: #b99a00;
+    color: #d20000;
+}
+
+.projects-list *::selection {
+    background-color: #8816b4;
+    color: #f64900;
+}
+
+.projects-list *::-moz-selection {
+    background-color: #b99a00;
+    color: #d20000;
+}
+
 html {
-    font-size: 100%;
+    font-size: 125%;
     scrollbar-width: none;
-    letter-spacing: -0.01rem;
+    letter-spacing: -.018rem;
+    background-color: var(--background-color);
+    overscroll-behavior: none;
 }
 
 body {
@@ -40,15 +123,46 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "GTPMT", ui-monospace, monospace;
-    line-height: 110%;
+    font-family: "Panchi", ui-monospace, serif;
+    /*font-family: serif;*/
+    line-height: 120%;
     background-color: var(--background-color);
     color: var(--text-color);
 }
 
+h1, h2, h3, h4, h5 {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 a {
     color: var(--link-color);
-    text-decoration: none;
+    /*text-decoration: none;*/
+}
+
+/* External links (rehype-external-links adds target="_blank" to every
+   external link in rendered markdown; [slug].astro's url field does the
+   same manually) get a small north-east arrow. */
+a[target="_blank"]::after {
+    content: " ↗";
+}
+
+ul {
+    padding-left: var(--spacing);
+
+    li {
+        padding: .1rem;
+        text-indent: var(--neg-spacing);
+        margin-left: var(--spacing);
+
+        &::marker {
+            content: " ";
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
 }
 
 @media (min-width: 1000px) {
@@ -57,34 +171,38 @@ a {
     }
 }
 
-p {
+p, .project-meta > div {
     width: fit-content;
     text-wrap: pretty;
-    white-space: pre-wrap;
+    max-width: 45rem;
 }
 
 hr {
-    margin: 0.2rem -0.6rem 0 -0.6rem;
+    margin: 0.2rem -0rem 0 -0rem;
     border-width: 2px;
     border-style: dashed;
     border-bottom: none;
-    border-color: #bebebe;
+    border-color: var(--text-color);
 }
 
+.hhrr {
+    margin: var(--spacing) 0;
+}
+
+/* Shared look for the site's two text panels (#text-container on the home
+   page, #project-detail-info on a project's detail page) - each of those
+   IDs sets its own position/sizing since they differ slightly. */
 .info-box {
-    position: fixed;
-    top: 1rem;
-    left: auto;
-    right: auto;
-    width: 22rem;
-    max-width: calc(100vw - 2rem);
-    padding: 0.6rem;
-    overflow: scroll;
+    padding: 0.7rem 2rem 0.7rem 0.7rem;
+    overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    z-index: 100;
-    background-color: white;
+    background-color: var(--background-color);
     border-top: 2px solid black;
+
+    p {
+        /*max-width: 30rem;*/
+    }
 }
 
 .info-box::-webkit-scrollbar {
@@ -94,6 +212,14 @@ hr {
 /* Content sections */
 .level-0 {
     margin-left: 0;
+}
+
+.level-1 {
+    margin-left: var(--spacing);
+}
+
+.level-2 {
+    margin-left: 2rem;
 }
 
 .intro-content p {
@@ -113,24 +239,39 @@ hr {
     display: block;
 }
 
+.projects-list {
+    a {
+        color: var(--text-color) !important;
+    }
+}
+
+/* Base layout: #text-container is the left half of the screen, permanently
+   (see body's fixed/full-viewport siblings below); #image-container is the
+   right half and holds one curtain column by default, two on very wide
+   screens (see the min-width: 1800px query). Both use the same fixed,
+   edge-anchored technique so neither needs a wrapping flex parent. */
+#text-container {
+    position: fixed;
+    inset: 0;
+    right: auto;
+    width: 50vw;
+    height: 100vh;
+    z-index: 100;
+}
+
 #image-container {
     position: fixed;
     inset: 0;
-    width: 100vw;
+    left: auto;
+    width: 50vw;
     height: 100vh;
     display: flex;
     overflow: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     background-color: var(--image-background-color);
 }
 
-#image-container::-webkit-scrollbar {
-    display: none;
-}
-
 .curtain-column {
-    width: 50vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     position: relative;
@@ -152,11 +293,31 @@ hr {
     display: block;
 }
 
-/* Third column only appears on very wide screens (see the min-width: 1800px
-   query below); hidden by default so it doesn't affect the normal 50/50
-   split. */
-.curtain-column[data-column="middle"] {
+/* The second image box only appears on very wide screens (see the
+   min-width: 1800px query below). */
+.curtain-column[data-column="right"] {
     display: none;
+}
+
+@media (min-width: 1900px) {
+    #text-container,
+    #project-detail-info {
+        width: 33.334vw !important;
+        max-width: 33.334vw;
+    }
+
+    #image-container,
+    #project-detail-gallery-wrapper {
+        width: 66.667vw !important;
+    }
+
+    .curtain-column {
+        width: 50%;
+    }
+
+    .curtain-column[data-column="right"] {
+        display: block;
+    }
 }
 
 /* Landscape images are rotated upright so every curtain slot stays
@@ -172,14 +333,14 @@ hr {
 .project-info {
     display: none;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0.3rem 0.5rem;
-    background-color: white;
+    top: 0;
+    right: 10%;
+    padding: 0.7rem .3rem .3rem .3rem;
+    background-color: var(--background-color);
     border-top: 2px solid black;
     cursor: pointer;
     z-index: 20;
+    text-decoration: none;
 }
 
 .project-info.visible {
@@ -188,11 +349,7 @@ hr {
 
 /* toggle to disable detail pages*/
 .project-info.visible {
-    display: none;
-}
-
-.project-info-mark {
-    font-weight: bold;
+    display: block;
 }
 
 #project-detail {
@@ -207,21 +364,27 @@ hr {
     display: flex;
 }
 
-/* Overrides .info-box's fixed/floating positioning - the detail view keeps
-   the same 50/50 column split as the curtain, with the text as the left
-   column instead of a floating box. */
+/* The detail view's own 50/50 column split, matching #text-container /
+   #image-container on the home page - .info-box provides the shared look
+   (background, border-top, padding, scrolling, paragraph width cap). */
 #project-detail-info {
     position: static;
     width: 50vw;
     max-width: 50vw;
     height: 100vh;
-    overflow-y: auto;
-    z-index: auto;
     flex: none;
-    border: none;
+}
 
-    p {
-        max-width: 30rem;
+.project-meta {
+    h1 {
+        margin-bottom: .7rem;
+    }
+
+    div {
+        margin-bottom: .35rem;
+        text-wrap: pretty;
+        padding-left: var(--spacing);
+        text-indent: var(--neg-spacing);
     }
 }
 
@@ -230,7 +393,7 @@ hr {
     background: none;
     border: none;
     font: inherit;
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1;
     padding: 0;
     cursor: pointer;
@@ -239,6 +402,11 @@ hr {
 
 #project-detail-back {
     margin-bottom: 0.5rem;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 #project-detail-gallery-wrapper {
@@ -272,27 +440,9 @@ hr {
 
 @media (min-width: 1700px) {
     #project-detail-image-flow {
+        max-width: 1100px;
         column-count: 2;
         gap: 0;
-    }
-}
-
-@media (min-width: 1800px) {
-    .curtain-column {
-        width: 33.334vw;
-    }
-
-    .curtain-column[data-column="middle"] {
-        display: block;
-    }
-
-    #project-detail-info {
-        width: 33.334vw;
-        max-width: 33.334vw;
-    }
-
-    #project-detail-gallery-wrapper {
-        width: 66.667vw;
     }
 }
 
@@ -303,7 +453,7 @@ hr {
 }
 
 .image-filename {
-    max-width: calc(100% - 1rem);
+    max-width: calc(100% - var(--spacing));
     position: absolute;
     bottom: 0.5rem;
     left: 0.5rem;
@@ -324,79 +474,23 @@ hr {
     overflow: hidden;
 }
 
-.mobile-only {
-    display: none;
-}
-
 @media (max-width: 1000px) {
     html {
-        font-size: 96%;
+        font-size: 100%;
     }
 
-    .mobile-only {
-        display: block;
-    }
-
-    /* Info boxes - centered (text container is also toggleable, see below) */
-    .info-box {
-        top: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        right: auto;
-    }
-
-    #text-container-content {
-        display: block;
-    }
-
-    /* Closed state */
-    #text-container.mobile-closed {
-        cursor: pointer;
-    }
-
-    #text-container.mobile-closed #text-container-content {
-        display: none;
-    }
-
-    #text-container.mobile-closed::before {
-        content: "Info ↓";
-    }
-
-    /* Open state - show close button */
-    #text-container::after {
-        content: "↑";
-        position: absolute;
-        bottom: 0.6rem;
-        right: 0.6rem;
-        cursor: pointer;
-    }
-
-    #text-container.mobile-closed::after {
-        content: "";
-    }
-
-    /* Hide grid overlay */
-    #grid {
-        display: none;
-    }
-
-    /* Single column image layout */
-    #image-container {
-        display: block;
-    }
-
-    .curtain-column[data-column="left"] {
+    /* No curtain on mobile - projects are only reachable via the list in
+       #text-container, which takes the full screen. */
+    #text-container {
         width: 100vw;
-        height: 100vh;
     }
 
-    .curtain-column[data-column="middle"],
-    .curtain-column[data-column="right"] {
+    #image-container {
         display: none;
     }
 
-    .curtain-column img.rotated {
-        height: 100vw;
+    #grid {
+        display: block;
     }
 
     /* Stack the detail view's text/gallery in one scroll context (text
@@ -414,7 +508,6 @@ hr {
         height: auto;
         overflow-y: visible;
         flex: none;
-        transform: translateX(0);
     }
 
     #project-detail-gallery-wrapper {
