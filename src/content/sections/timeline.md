@@ -15,7 +15,7 @@ Exhibitions:
 
 Teaching:
 
-- 2026: Co-Teaching "Type Text Tools" with Katharina Neijdl, *HfK Bremen*
+- 2026: Co-Teaching "Type Text Tools" with Katharina Nejdl, *HfK Bremen*
 - 2024: Teaching "Is It a Room in a Screen or a Screen in a Room", *Burg Giebichenstein University of Art and Design
   Halle*
 
