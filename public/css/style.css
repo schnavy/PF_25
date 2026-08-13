@@ -144,7 +144,7 @@ a {
    external link in rendered markdown; [slug].astro's url field does the
    same manually) get a small north-east arrow. */
 a[target="_blank"]::after {
-    content: " ↗";
+    content: "↗";
 }
 
 ul {
