@@ -47,12 +47,31 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Libertine";
+    src: url("../fonts/LinLibertine.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Libertine";
+    src: url("../fonts/LinLibertineI.woff2") format("woff2");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
 :root {
     --background-color: rgb(247, 247, 247);
     --background-color-contrast: white;
     --text-color: #000000;
     --link-color: var(--text-color);
     --image-background-color: rgb(209, 243, 89);
+    --spacing: .7rem;
+    --neg-spacing: -0.7rem;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -129,12 +148,12 @@ a[target="_blank"]::after {
 }
 
 ul {
-    padding-left: 1rem;
+    padding-left: var(--spacing);
 
     li {
         padding: .1rem;
-        text-indent: -1rem;
-        margin-left: 1rem;
+        text-indent: var(--neg-spacing);
+        margin-left: var(--spacing);
 
         &::marker {
             content: " ";
@@ -166,6 +185,10 @@ hr {
     border-color: var(--text-color);
 }
 
+.hhrr {
+    margin: var(--spacing) 0;
+}
+
 /* Shared look for the site's two text panels (#text-container on the home
    page, #project-detail-info on a project's detail page) - each of those
    IDs sets its own position/sizing since they differ slightly. */
@@ -192,7 +215,7 @@ hr {
 }
 
 .level-1 {
-    margin-left: 1rem;
+    margin-left: var(--spacing);
 }
 
 .level-2 {
@@ -276,7 +299,7 @@ hr {
     display: none;
 }
 
-@media (min-width: 1800px) {
+@media (min-width: 1900px) {
     #text-container,
     #project-detail-info {
         width: 33.334vw !important;
@@ -360,8 +383,8 @@ hr {
     div {
         margin-bottom: .35rem;
         text-wrap: pretty;
-        padding-left: 1rem;
-        text-indent: -1rem;
+        padding-left: var(--spacing);
+        text-indent: var(--neg-spacing);
     }
 }
 
@@ -430,7 +453,7 @@ hr {
 }
 
 .image-filename {
-    max-width: calc(100% - 1rem);
+    max-width: calc(100% - var(--spacing));
     position: absolute;
     bottom: 0.5rem;
     left: 0.5rem;
