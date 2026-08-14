@@ -70,6 +70,7 @@
     --link-color: var(--text-color);
     --image-background-color: rgb(209, 243, 89);
     --spacing: .7rem;
+    --spacing-lg: 1.2rem;
     --neg-spacing: -0.7rem;
 
 }
@@ -130,14 +131,14 @@ body {
     color: var(--text-color);
 }
 
-h1, h2, h3, h4, h5 {
+p, h1, h2, h3, h4, h5 {
     font-size: 1rem;
     font-weight: normal;
+    text-wrap: pretty;
 }
 
 a {
     color: var(--link-color);
-    /*text-decoration: none;*/
 }
 
 /* External links (rehype-external-links adds target="_blank" to every
@@ -199,10 +200,6 @@ hr {
     -ms-overflow-style: none;
     background-color: var(--background-color);
     border-top: 2px solid black;
-
-    p {
-        /*max-width: 30rem;*/
-    }
 }
 
 .info-box::-webkit-scrollbar {
@@ -229,6 +226,14 @@ hr {
 /* Imprint toggle */
 #impressum-btn {
     cursor: pointer;
+}
+
+#impressum-btn::after {
+    content: " +";
+}
+
+#impressum-btn.open::after {
+    content: " -";
 }
 
 .imprint-container {
@@ -475,14 +480,14 @@ hr {
 }
 
 @media (max-width: 1000px) {
-    html {
-        font-size: 100%;
-    }
-
     /* No curtain on mobile - projects are only reachable via the list in
        #text-container, which takes the full screen. */
     #text-container {
         width: 100vw;
+    }
+
+    .info-box {
+        padding: var(--spacing) var(--spacing-lg) var(--spacing) var(--spacing);
     }
 
     #image-container {
