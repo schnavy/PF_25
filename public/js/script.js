@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (impressumBtn && imprintContainer) {
     impressumBtn.addEventListener('click', () => {
       imprintContainer.classList.toggle('open');
+      impressumBtn.classList.toggle('open');
     });
   }
 
