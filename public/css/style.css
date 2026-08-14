@@ -382,11 +382,11 @@ hr {
 
 .project-meta {
     h1 {
-        margin-bottom: .7rem;
+        margin-bottom: .4rem;
     }
 
     div {
-        margin-bottom: .35rem;
+        margin-bottom: .2rem;
         text-wrap: pretty;
         padding-left: var(--spacing);
         text-indent: var(--neg-spacing);

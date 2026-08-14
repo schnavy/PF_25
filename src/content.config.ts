@@ -1,7 +1,18 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
+// generateId keeps ids exactly as they were under the old legacy content
+// collections (the raw file path relative to the collection folder,
+// extension included, e.g. "intro.md" or "<project-slug>/desc.md") so the
+// rest of the codebase (entry.id.split('/')[0], entry.id === 'intro.md')
+// doesn't need to change.
 const projectsCollection = defineCollection({
-  type: 'content',
+  loader: glob({
+    pattern: '*/desc.md',
+    base: './src/content/projects',
+    generateId: ({ entry }) => entry,
+  }),
   schema: z.object({
     title: z.string(),
     year: z.number(),
@@ -17,7 +28,11 @@ const projectsCollection = defineCollection({
 });
 
 const sectionsCollection = defineCollection({
-  type: 'content',
+  loader: glob({
+    pattern: '*.md',
+    base: './src/content/sections',
+    generateId: ({ entry }) => entry,
+  }),
   schema: z.object({
     title: z.string().optional(),
   }),

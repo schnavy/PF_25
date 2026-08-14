@@ -1,5 +1,5 @@
 ---
-import {getCollection} from 'astro:content';
+import {getCollection, render} from 'astro:content';
 import {getImage} from 'astro:assets';
 
 // Get all content
@@ -90,9 +90,9 @@ const soundPaths = [
 ];
 
 // Render markdown content
-const {Content: IntroContent} = intro ? await intro.render() : {Content: null};
-const {Content: ContactContent} = contact ? await contact.render() : {Content: null};
-const {Content: TimelineContent} = timeline ? await timeline.render() : {Content: null};
+const {Content: IntroContent} = intro ? await render(intro) : {Content: null};
+const {Content: ContactContent} = contact ? await render(contact) : {Content: null};
+const {Content: TimelineContent} = timeline ? await render(timeline) : {Content: null};
 
 
 // Generate random favicon number

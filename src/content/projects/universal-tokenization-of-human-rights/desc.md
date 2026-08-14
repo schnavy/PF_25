@@ -6,7 +6,7 @@ medium: "13 printed sheets of paper (4 pages output, 9 pages dictionary), websit
 url: "[Web Version](https://humanrights.davidwahrenburg.de/)"
 ---
 
-A Byte-Pair-encoded translation of the Universal declaration of human rights.
+A byte-pair-encoded version of the Universal Declaration of Human Rights.
 <br/>
 The "tokenization" is a crucial step that happens before any interaction with a language or text based machine learning model. A text of any language is translated into an array of numbers, which represent common repetitions of characters. Most commonly this is achieved using the Byte-Pair-encoding algorithm (BPE), which iteratively abstracts the most common sequence of byte-pairs from a certain dataset into a dictionary of id's – this repeats until every unique character and repeated series of characters has an id. Leaving no repetition and only numbers for the models to digest.
 <br/>

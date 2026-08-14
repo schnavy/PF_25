@@ -19,7 +19,15 @@
       "Bash(git commit *)",
       "Bash(pkill -f \"astro preview\")",
       "Bash(node --check /Users/david/GIT/PF/PF_25/public/js/script.js)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(npx astro *)",
+      "Bash(npm view *)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\('fs'\\).readFileSync\\(0,'utf8'\\)\\); console.log\\(v.slice\\(-15\\).join\\('\\\\n'\\)\\)\")",
+      "WebFetch(domain:docs.astro.build)",
+      "Bash(npm install *)",
+      "Bash(npm config *)",
+      "Bash(xargs -n1 basename)",
+      "Bash(npm list *)"
     ],
     "deny": [],
     "ask": []

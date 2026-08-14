@@ -1,5 +1,5 @@
 ---
-import {getCollection} from 'astro:content';
+import {getCollection, render} from 'astro:content';
 import {getImage} from 'astro:assets';
 
 // One static page per project that has a desc.md - reachable at
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const {entry} = Astro.props;
 const slug = Astro.params.slug;
-const {Content} = await entry.render();
+const {Content} = await render(entry);
 
 // Downscale + convert to webp at build time, same treatment as the curtain
 // images on the home page, scoped to just this project's folder.
