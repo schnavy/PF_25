@@ -119,67 +119,67 @@ const rand = Math.floor(Math.random() * 6);
             baseUrl: import.meta.env.BASE_URL
         }}>
             // Curtain images (fixed order) + sounds, read by js/script.js.
-            // describedProjects lists which project slugs have a desc.md and
-            // therefore their own detail page at `${baseUrl}${slug}/`.
-            window.curtainImages = curtainImages;
-            window.soundPaths = soundPaths;
-            window.describedProjects = describedProjects;
-            window.baseUrl = baseUrl;
+                // describedProjects lists which project slugs have a desc.md and
+                // therefore their own detail page at `${baseUrl}${slug}/`.
+                window.curtainImages = curtainImages;
+                window.soundPaths = soundPaths;
+                window.describedProjects = describedProjects;
+                window.baseUrl = baseUrl;
 
-            // Random link colors - each link gets a different color
-            const linkColors = [
-                '#d20000', // red
-                '#00b475', // turquoise
-                '#0066ff', // blue
-                '#f64900', // light salmon
-                '#b99a00', // yellow
-                '#8816b4', // purple
-                '#cc7b00', // peach
-                '#903caf'  // lavender
-            ];
+                // Random link colors - each link gets a different color
+                const linkColors = [
+                    '#d20000', // red
+                    '#00b475', // turquoise
+                    '#0066ff', // blue
+                    '#f64900', // light salmon
+                    '#b99a00', // yellow
+                    '#8816b4', // purple
+                    '#cc7b00', // peach
+                    '#903caf'  // lavender
+                    ];
 
-            const randomColor = () => linkColors[Math.floor(Math.random() * linkColors.length)];
+                const randomColor = () => linkColors[Math.floor(Math.random() * linkColors.length)];
 
-            function changeColors() {
-                const links = document.querySelectorAll('a[target="_blank"], a[href^="mailto:"]');
-                links.forEach(link => {
-                    link.style.color = randomColor();
-                });
+                function changeColors() {
+                    const links = document.querySelectorAll('a[target="_blank"], a[href^="mailto:"]');
+                    links.forEach(link => {
+                        link.style.color = randomColor();
+                        });
 
-                // Shared per-load colors, reused by the project-info "?" marks
-                const topBorderColor = randomColor();
-                const dashedBorderColor = randomColor();
+                    // Shared per-load colors, reused by the project-info "?" marks
+                    const topBorderColor = randomColor();
+                    const dashedBorderColor = randomColor();
 
-                const textContainer = document.getElementById('text-container');
-                textContainer.style.borderColor = topBorderColor;
+                    const textContainer = document.getElementById('text-container');
+                    textContainer.style.borderColor = topBorderColor;
 
-                /*         const hrs = document.querySelectorAll('hr');
-                         hrs.forEach(hr => {
-                             hr.style.borderColor = dashedBorderColor;
-                         });*/
+                    /*         const hrs = document.querySelectorAll('hr');
+                             hrs.forEach(hr => {
+                                 hr.style.borderColor = dashedBorderColor;
+                             });*/
 
-                document.querySelectorAll('.project-info').forEach(box => {
-                    box.style.borderTopColor = topBorderColor;
-                });
-            }
+                    document.querySelectorAll('.project-info').forEach(box => {
+                        box.style.borderTopColor = topBorderColor;
+                        });
+                    }
 
-            document.addEventListener('DOMContentLoaded', changeColors);
+                document.addEventListener('DOMContentLoaded', changeColors);
 
-            // Matomo Analytics
-            var _paq = window._paq = window._paq || [];
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-                var u = "//webstat.davidwahrenburg.de/";
-                _paq.push(['setTrackerUrl', u + 'matomo.php']);
-                _paq.push(['setSiteId', '1']);
-                var d = document,
-                    g = d.createElement('script'),
-                    s = d.getElementsByTagName('script')[0];
-                g.async = true;
-                g.src = u + 'matomo.js';
-                s.parentNode.insertBefore(g, s);
-            })();
+                // Matomo Analytics
+                var _paq = window._paq = window._paq || [];
+                _paq.push(['trackPageView']);
+                _paq.push(['enableLinkTracking']);
+                (function () {
+                    var u = "//webstat.davidwahrenburg.de/";
+                    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                    _paq.push(['setSiteId', '1']);
+                    var d = document,
+                        g = d.createElement('script'),
+                        s = d.getElementsByTagName('script')[0];
+                    g.async = true;
+                    g.src = u + 'matomo.js';
+                    s.parentNode.insertBefore(g, s);
+                    })();
         </script>
     </head>
 
@@ -225,10 +225,14 @@ const rand = Math.floor(Math.random() * 6);
                 <br/><span id="impressum-btn">Imprint</span>
                 <div class="imprint-container">
                     <br/>
-                    Responsible for shown content, design and development of this website:<br/>
-                    David Wahrenburg<br/>
-                    Rolandstraße 11<br/>
-                    D-28199 Bremen<br/><br/>
+                    Open Typeface: <a href="https://erwanleretif.xyz/typotheque#typo-demozone-panchi">Panchi
+                    Mono</a><br/><br/>
+                    Responsible for content, design and development of this website:<br/>
+                    <div class="level-1">
+                        David Wahrenburg<br/>
+                        Rolandstraße 11<br/>
+                        D-28199 Bremen<br/><br/>
+                    </div>
                     ©{new Date().getFullYear()} all rights
                     reserved
                     <br/><br/>
