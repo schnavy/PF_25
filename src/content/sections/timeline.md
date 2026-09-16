@@ -9,7 +9,7 @@ and designer, please visit:<br/>
 
 Exhibitions:
 
-- We are all in the same ~~boat~~ storm, _MS Dauerwelle, Breminale, Bremen_, 2026
+- In the same ~~boat~~ storm, _MS Dauerwelle, Breminale, Bremen_, 2026
 - Hochschultage _HfK Bremen, Halle 1_, 2025
 - Call Me #6, _Wartenau 16, Hamburg_, 2022
 - Add Art, _Kanzlei Ruge Fehsenfeld_, 2021
