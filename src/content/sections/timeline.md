@@ -6,7 +6,7 @@ Exhibitions:
 
 - We are all in the same ~~boat~~ storm, _MS Dauerwelle, Breminale, Bremen_, 2026
 - Hochschultage _HfK Bremen, Halle 1_, 2025
-- Calle Me #6, _Wartenau 16, Hamburg_, 2022
+- Call Me #6, _Wartenau 16, Hamburg_, 2022
 - Add Art, _Kanzlei Ruge Fehsenfeld_, 2021
 - Zwischen Zaun und Zirka, _Frappant Galerie, Hamburg_, 2021
 - New Bodies New Spaces, _Common Garden, The Wrong Biennale_, 2021
