@@ -1,6 +1,11 @@
 ---
 title: "Timeline"
 ---
+Regarding my work as a developer
+and designer, please visit:<br/>
+- [smallplates.studio](https://smallplates.studio/)
+
+<br/>
 
 Exhibitions:
 
