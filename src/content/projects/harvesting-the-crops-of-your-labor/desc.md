@@ -19,7 +19,7 @@ the entangled networks of labor and materiality behind the output.
 <br/>
 
 The installation was running from the opening afternoon of Hochschultage 2025 at HfK Bremen in Halle 1 until the closing
-evening day and night, detecting and saving more than 400.000 objects categorized into the following categories:
+evening day and night, detecting and saving 175.878 objects categorized into the following categories:
 
 <br/>
 
